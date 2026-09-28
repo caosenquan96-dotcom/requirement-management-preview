@@ -571,6 +571,19 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .filter-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .filter-toggle-icon {
+      width: 14px;
+      height: 14px;
+      color: #8d95a2;
+      transition: transform .18s ease;
+    }
+    .filter-toggle-btn.is-expanded .filter-toggle-icon { transform: rotate(180deg); }
     .filter-actions {
       display: flex;
       justify-content: flex-end;
@@ -3404,12 +3417,14 @@
       button.addEventListener('click', () => {
         const expanded = button.getAttribute('aria-expanded') === 'true';
         const nextExpanded = !expanded;
+        const filterPanel = button.closest('.feedback-filter');
+        const filterToggleText = button.querySelector('[data-filter-toggle-text]');
         button.setAttribute('aria-expanded', String(nextExpanded));
-        document.querySelectorAll('[data-extra-filter]').forEach((item) => {
+        button.classList.toggle('is-expanded', nextExpanded);
+        if (filterToggleText) filterToggleText.textContent = nextExpanded ? '收起筛选' : '更多筛选';
+        filterPanel?.querySelectorAll('[data-extra-filter]').forEach((item) => {
           item.hidden = !nextExpanded;
         });
-        const filterToggleText = button.querySelector('[data-filter-toggle-text]');
-        if (filterToggleText) filterToggleText.textContent = nextExpanded ? '收起筛选' : '更多筛选';
       });
     });
 
