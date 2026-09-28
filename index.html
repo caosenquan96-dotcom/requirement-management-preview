@@ -663,6 +663,158 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .feedback-title-link {
+      display: block;
+      max-width: 100%;
+      color: #2f8dfb;
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .feedback-title-link:hover { color: #1f73e8; text-decoration: underline; }
+    .feedback-table .title-cell { cursor: default; }
+    .feedback-title-tooltip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 180;
+      display: none;
+      max-width: min(760px, calc(100vw - 48px));
+      padding: 13px 22px;
+      border: 1px solid rgba(224, 228, 238, .96);
+      border-radius: 18px;
+      background: #fff;
+      color: #2f3440;
+      box-shadow: 0 10px 28px rgba(34, 43, 69, .16);
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: 400;
+      white-space: normal;
+      word-break: break-word;
+      pointer-events: none;
+    }
+    .feedback-title-tooltip.is-show { display: block; }
+    .feedback-title-tooltip::after {
+      content: "";
+      position: absolute;
+      left: var(--tooltip-arrow-left, 50%);
+      bottom: -8px;
+      width: 16px;
+      height: 16px;
+      border-right: 1px solid rgba(224, 228, 238, .96);
+      border-bottom: 1px solid rgba(224, 228, 238, .96);
+      background: #fff;
+      transform: translateX(-50%) rotate(45deg);
+    }
+    .feedback-table .image-col,
+    .feedback-table .image-cell { text-align: left; }
+    .feedback-image-list {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      overflow: hidden;
+      vertical-align: middle;
+    }
+    .feedback-image-thumb {
+      width: 42px;
+      height: 34px;
+      border: 1px solid #e3e8f2;
+      border-radius: 6px;
+      background: #fff url("assets/feedback-preview.png") center / cover no-repeat;
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: middle;
+      cursor: zoom-in;
+      padding: 0;
+      flex: 0 0 auto;
+    }
+    .feedback-image-thumb.image-2 { background-image: url("assets/feedback-preview-2.png"); }
+    .feedback-image-thumb:hover { border-color: #737bff; box-shadow: 0 0 0 3px rgba(115, 123, 255, .12); }
+    .feedback-image-empty { color: #b6becd; }
+
+    .image-preview-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 72px 86px;
+      background: rgba(15, 18, 26, .72);
+      overflow: auto;
+    }
+    .image-preview-backdrop.is-open { display: flex; }
+    .image-preview-panel {
+      position: relative;
+      max-width: min(1180px, calc(100vw - 144px));
+      max-height: calc(100vh - 142px);
+      background: transparent;
+      box-shadow: none;
+      overflow: visible;
+    }
+    .image-preview-panel img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100vh - 142px);
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 18px 54px rgba(0, 0, 0, .34);
+      transform-origin: center center;
+      transition: transform .16s ease;
+    }
+    .image-preview-close {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(31, 35, 45, .82);
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .image-preview-close:hover { background: rgba(47, 141, 251, .88); }
+    .image-preview-toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      height: 42px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(36, 40, 52, .78);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .26);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .preview-tool-btn {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: transparent;
+      display: inline-grid;
+      place-items: center;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .preview-tool-btn:hover { background: rgba(255, 255, 255, .16); }
+    .preview-tool-btn svg { width: 18px; height: 18px; }
+    .preview-tool-divider {
+      width: 1px;
+      height: 18px;
+      margin: 0 2px;
+      background: rgba(255, 255, 255, .22);
+    }
     .feedback-table .action-col,
     .feedback-table .action-cell {
       position: sticky;
@@ -1062,43 +1214,16 @@
       border-radius: 8px;
       background: #fff;
       overflow: hidden;
-    }
-    .detail-image-preview {
-      height: 190px;
-      padding: 0;
-      background: linear-gradient(180deg, #f8f9ff 0%, #fff 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .detail-image-preview::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 42px;
-      background: linear-gradient(90deg, #ffe7ef 0%, #f8edf8 48%, #d9edff 100%);
-    }
-    .detail-image-preview::after {
-      content: "";
-      position: absolute;
-      inset: 74px 22px auto;
-      height: 50px;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #e8eef8 0%, #dfe6f1 100%);
-      box-shadow: 0 58px 0 #f0f3f8;
-    }
-    .detail-image-preview span {
-      position: absolute;
       display: block;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(116, 126, 148, .42);
-      z-index: 1;
+      padding: 0;
+      cursor: zoom-in;
     }
-    .detail-image-preview span:nth-child(1) { left: 24px; top: 58px; width: 120px; background: #8b95a8; }
-    .detail-image-preview span:nth-child(2) { left: 24px; top: 142px; width: 190px; }
-    .detail-image-preview span:nth-child(3) { left: 238px; top: 142px; width: 160px; }
+    .detail-image-thumb:hover { border-color: #737bff; box-shadow: 0 0 0 3px rgba(115, 123, 255, .10); }
+    .detail-image-preview {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
     .detail-attachment-name {
       display: block;
       padding: 8px 10px;
@@ -2078,6 +2203,7 @@
                     <col style="width: 110px;" />
                     <col style="width: 120px;" />
                     <col style="width: 380px;" />
+                    <col style="width: 120px;" />
                     <col style="width: 130px;" />
                     <col style="width: 170px;" />
                     <col style="width: 110px;" />
@@ -2091,6 +2217,7 @@
                       <th style="width: 110px;">意见类型</th>
                       <th style="width: 120px;">所属平台</th>
                       <th class="title-col">标题</th>
+                      <th class="image-col" style="width: 120px;">图片详情</th>
                       <th style="width: 130px;">反馈用户</th>
                       <th style="width: 170px;">反馈时间</th>
                       <th style="width: 110px;">状态</th>
@@ -2101,10 +2228,11 @@
                     </tr>
                   </thead>
                                                                         <tbody>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>体验提升</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工交付详情列表排序不明确且不稳定</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工交付详情列表排序不明确且不稳定</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-guo">郭</span>郭帅</span></td>
                       <td>2026-09-24 10:41</td>
                       <td><span class="feedback-status pending">待处理</span></td>
@@ -2116,7 +2244,8 @@
                     <tr data-demand-id="R2026090983660">
                       <td>Bug修复</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">@数字人结项，结项失败，且失败记录为空，也看不到对应的会话记录</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">@数字人结项，结项失败，且失败记录为空，也看不到对应的会话记录</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-guo">郭</span>郭帅</span></td>
                       <td>2026-09-23 18:45</td>
                       <td><span class="feedback-status pending">待处理</span></td>
@@ -2128,7 +2257,8 @@
                     <tr data-demand-id="R2026090986328">
                       <td>新增功能</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">仓颉提bug，提交人仓颉，受理人沈括，关注人是否可以加一下此需求的受理人</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">仓颉提bug，提交人仓颉，受理人沈括，关注人是否可以加一下此需求的受理人</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-liu">刘</span>刘万龙</span></td>
                       <td>2026-09-23 16:40</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2140,7 +2270,8 @@
                     <tr data-demand-id="R2026090983660">
                       <td>功能建议</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工关联应用，自动生成应用清单，具体建议查看详情</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工关联应用，自动生成应用清单，具体建议查看详情</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-tian">田</span>田蓬伟</span></td>
                       <td>2026-09-24 10:39</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2149,10 +2280,11 @@
                       <td><span class="feedback-id">FB20260924103959104555</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a><a class="rebind" href="#rebind">换绑需求</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>体验提升</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">代码提交的节点优化</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">代码提交的节点优化</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-qin">秦</span>秦继芳</span></td>
                       <td>2026-09-23 18:18</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2164,7 +2296,8 @@
                     <tr data-demand-id="R2026091888052">
                       <td>功能建议</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">仓颉为了跑测试会安装插件maven-surefire-plugin，但是我项目里已经有了。</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">仓颉为了跑测试会安装插件maven-surefire-plugin，但是我项目里已经有了。</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yang">杨</span>杨杰</span></td>
                       <td>2026-09-23 15:27</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2176,7 +2309,8 @@
                     <tr data-demand-id="R2026090983660">
                       <td>新增功能</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">希望新增系统运维岗位专家，主要职责见详情描述</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">希望新增系统运维岗位专家，主要职责见详情描述</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-long">龙</span>龙奥</span></td>
                       <td>2026-09-24 10:10</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2188,7 +2322,8 @@
                     <tr data-demand-id="R2026091672543">
                       <td>体验提升</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">测试提给森泉</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">测试提给森泉</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-wang">王</span>王民利</span></td>
                       <td>2026-09-23 17:52</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2197,10 +2332,11 @@
                       <td><span class="feedback-id">FB20260923175243095136</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>Bug修复</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">同一群多个数字员工协作时上下文与任务状态串线</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">同一群多个数字员工协作时上下文与任务状态串线</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-wan">万</span>万霖</span></td>
                       <td>2026-09-23 18:56</td>
                       <td><span class="feedback-status rejected">已驳回</span></td>
@@ -2212,7 +2348,8 @@
                     <tr data-demand-id="R2026090983660">
                       <td>Bug修复</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">joyworker交付详情里没有新拉群聊的项目</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">joyworker交付详情里没有新拉群聊的项目</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-zhu">朱</span>朱欣鑫</span></td>
                       <td>2026-09-23 14:08</td>
                       <td><span class="feedback-status rejected">已驳回</span></td>
@@ -2221,10 +2358,11 @@
                       <td><span class="feedback-id">FB20260923140837090452</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>体验提升</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工列表页增加按员工ID精准检索能力</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工列表页增加按员工ID精准检索能力</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-feng">冯</span>冯汉禹</span></td>
                       <td>2026-09-22 11:18</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2233,10 +2371,11 @@
                       <td><span class="feedback-id">FB20260922111845063824</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>功能建议</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">希望在管理菜单中直接展示数字员工编号</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">希望在管理菜单中直接展示数字员工编号</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-lian">连</span>连泽茵</span></td>
                       <td>2026-09-22 10:36</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2248,7 +2387,8 @@
                     <tr data-demand-id="R2026081582825">
                       <td>新增功能</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工工厂支持ID、名称组合查询</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工工厂支持ID、名称组合查询</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-deng">邓</span>邓国振</span></td>
                       <td>2026-09-21 17:25</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2257,10 +2397,11 @@
                       <td><span class="feedback-id">FB20260921172552057903</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>Bug修复</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">菜单列表搜索数字员工ID后结果为空</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">菜单列表搜索数字员工ID后结果为空</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-liyi">李</span>李意文</span></td>
                       <td>2026-09-21 15:12</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2272,7 +2413,8 @@
                     <tr data-demand-id="R2026081582825">
                       <td>体验提升</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工ID检索希望支持复制后自动去空格</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工ID检索希望支持复制后自动去空格</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-qiao">乔</span>乔飞</span></td>
                       <td>2026-09-20 19:48</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2284,7 +2426,8 @@
                     <tr data-demand-id="R2026081582825">
                       <td>功能建议</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">列表页检索条件增加数字员工ID字段</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">列表页检索条件增加数字员工ID字段</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-test">测</span>测试同学</span></td>
                       <td>2026-09-20 14:21</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2293,10 +2436,11 @@
                       <td><span class="feedback-id">FB20260920142159046208</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>体验提升</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工管理菜单列表页查询按钮响应较慢</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工管理菜单列表页查询按钮响应较慢</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yu">于</span>于坤</span></td>
                       <td>2026-09-19 18:36</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2305,10 +2449,11 @@
                       <td><span class="feedback-id">FB20260919183645041036</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>功能建议</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">希望列表页支持按数字员工负责人筛选</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">希望列表页支持按数字员工负责人筛选</a></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-wan">万</span>万霖</span></td>
                       <td>2026-09-19 16:10</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2317,10 +2462,11 @@
                       <td><span class="feedback-id">FB20260919161045057631</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>新增功能</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工列表导出时增加员工ID列</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工列表导出时增加员工ID列</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-zhu">朱</span>朱欣鑫</span></td>
                       <td>2026-09-18 11:32</td>
                       <td><span class="feedback-status done">已处理</span></td>
@@ -2329,10 +2475,11 @@
                       <td><span class="feedback-id">FB20260918113205050986</span></td>
                       <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
                     </tr>
-                    <tr data-demand-id="R2026081582825">
+                    <tr>
                       <td>功能建议</td>
                       <td>JoyWorker</td>
-                      <td class="title-cell">数字员工工厂列表页筛选条件支持按业务线联动</td>
+                      <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工工厂列表页筛选条件支持按业务线联动</a></td>
+                      <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yang">杨</span>杨杰</span></td>
                       <td>2026-09-18 09:26</td>
                       <td><span class="feedback-status rejected">已驳回</span></td>
@@ -2359,6 +2506,26 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <div class="image-preview-backdrop" id="image-preview-modal" aria-hidden="true">
+    <div class="image-preview-panel" role="dialog" aria-modal="true" aria-label="图片预览">
+      <button class="image-preview-close" type="button" data-image-preview-close aria-label="关闭">×</button>
+      <img src="" alt="图片预览" data-image-preview-img />
+    </div>
+    <div class="image-preview-toolbar" aria-label="图片操作工具">
+      <button class="preview-tool-btn" type="button" data-image-zoom-out aria-label="缩小">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M8 11h6M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="preview-tool-btn" type="button" data-image-zoom-in aria-label="放大">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M11 8v6M8 11h6M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <span class="preview-tool-divider" aria-hidden="true"></span>
+      <button class="preview-tool-btn" type="button" data-image-rotate-left aria-label="向左旋转">↺</button>
+      <button class="preview-tool-btn" type="button" data-image-rotate-right aria-label="向右旋转">↻</button>
+      <span class="preview-tool-divider" aria-hidden="true"></span>
+      <button class="preview-tool-btn" type="button" data-image-reset aria-label="重置">1:1</button>
+    </div>
   </div>
 
   <div class="drawer-backdrop" id="feedback-detail-drawer" aria-hidden="true">
@@ -2741,8 +2908,19 @@
     const panels = document.querySelectorAll('.panel-view');
     const feedbackTables = document.querySelectorAll('.feedback-table');
     const feedbackTableScrolls = document.querySelectorAll('.feedback-table-scroll');
+    const feedbackTitleTooltip = document.createElement('div');
+    feedbackTitleTooltip.className = 'feedback-title-tooltip';
+    document.body.appendChild(feedbackTitleTooltip);
+    let activeTitleCell = null;
     const copyButtons = document.querySelectorAll('[data-copy-value]');
     const copyToast = document.querySelector('#copy-toast');
+    const imagePreviewModal = document.querySelector('#image-preview-modal');
+    const imagePreviewImg = document.querySelector('[data-image-preview-img]');
+    const imageZoomOutButton = document.querySelector('[data-image-zoom-out]');
+    const imageZoomInButton = document.querySelector('[data-image-zoom-in]');
+    const imageRotateLeftButton = document.querySelector('[data-image-rotate-left]');
+    const imageRotateRightButton = document.querySelector('[data-image-rotate-right]');
+    const imageResetButton = document.querySelector('[data-image-reset]');
     const relationCountButtons = document.querySelectorAll('[data-demand-feedback]');
     const feedbackTbody = document.querySelector('#feedback-panel .feedback-table tbody');
     const feedbackRows = document.querySelectorAll('#feedback-panel .feedback-table tbody tr');
@@ -2801,15 +2979,17 @@
     let activeDetailRow = null;
     let currentFeedbackMode = 'claim';
     let feedbackCurrentPage = 1;
+    let imagePreviewScale = 1;
+    let imagePreviewRotation = 0;
     let selectedFollowers = [{ avatar: 'avatar-ma', initial: '马', name: '马莹莹' }];
 
     function buildDetailImages(imageName = '问题截图.png') {
       return `
         <div class="detail-attachments" aria-label="描述图片">
-          <div class="detail-image-thumb" title="${escapeHtml(imageName)}">
-            <div class="detail-image-preview" aria-hidden="true"><span></span><span></span><span></span></div>
+          <button class="detail-image-thumb" type="button" title="预览图片" aria-label="预览图片：${escapeHtml(imageName)}" data-preview-image="assets/feedback-preview.png">
+            <img class="detail-image-preview" src="assets/feedback-preview.png" alt="${escapeHtml(imageName)}" />
             <span class="detail-attachment-name">${escapeHtml(imageName)}</span>
-          </div>
+          </button>
         </div>
       `;
     }
@@ -2876,6 +3056,62 @@
       textarea.remove();
       return Promise.resolve();
     }
+
+    function applyImagePreviewTransform() {
+      if (!imagePreviewImg) return;
+      imagePreviewImg.style.transform = `scale(${imagePreviewScale}) rotate(${imagePreviewRotation}deg)`;
+    }
+
+    function resetImagePreviewTransform() {
+      imagePreviewScale = 1;
+      imagePreviewRotation = 0;
+      applyImagePreviewTransform();
+    }
+
+    function openImagePreview(src) {
+      if (!imagePreviewModal || !imagePreviewImg || !src) return;
+      imagePreviewImg.src = src;
+      resetImagePreviewTransform();
+      imagePreviewModal.classList.add('is-open');
+      imagePreviewModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeImagePreview() {
+      imagePreviewModal?.classList.remove('is-open');
+      imagePreviewModal?.setAttribute('aria-hidden', 'true');
+      if (imagePreviewImg) imagePreviewImg.src = '';
+      resetImagePreviewTransform();
+    }
+
+    imageZoomOutButton?.addEventListener('click', () => {
+      imagePreviewScale = Math.max(.5, Number((imagePreviewScale - .2).toFixed(2)));
+      applyImagePreviewTransform();
+    });
+
+    imageZoomInButton?.addEventListener('click', () => {
+      imagePreviewScale = Math.min(3, Number((imagePreviewScale + .2).toFixed(2)));
+      applyImagePreviewTransform();
+    });
+
+    imageRotateLeftButton?.addEventListener('click', () => {
+      imagePreviewRotation -= 90;
+      applyImagePreviewTransform();
+    });
+
+    imageRotateRightButton?.addEventListener('click', () => {
+      imagePreviewRotation += 90;
+      applyImagePreviewTransform();
+    });
+
+    imageResetButton?.addEventListener('click', resetImagePreviewTransform);
+
+    document.addEventListener('click', (event) => {
+      const previewTrigger = event.target.closest('[data-preview-image]');
+      if (!previewTrigger) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openImagePreview(previewTrigger.dataset.previewImage);
+    });
 
     copyButtons.forEach((button) => {
       button.addEventListener('click', (event) => {
@@ -3028,7 +3264,7 @@
       if (!table) return;
       const headers = Array.from(table.querySelectorAll('thead th'));
       const cols = Array.from(table.querySelectorAll('col'));
-      const minWidths = [86, 96, 220, 108, 138, 92, 100, 156, 190, 156];
+      const minWidths = [86, 96, 220, 104, 108, 138, 92, 100, 156, 190, 156];
 
       headers.forEach((header, index) => {
         const resizer = document.createElement('span');
@@ -3103,6 +3339,47 @@
 
     feedbackTables.forEach(enableColumnResize);
     feedbackTableScrolls.forEach(enableHorizontalDrag);
+
+    function getTitleOverflowTarget(cell) {
+      return cell.querySelector('.feedback-title-link') || cell;
+    }
+
+    function isTitleOverflow(cell) {
+      const target = getTitleOverflowTarget(cell);
+      return target.scrollWidth > target.clientWidth + 1;
+    }
+
+    function hideFeedbackTitleTooltip() {
+      activeTitleCell = null;
+      feedbackTitleTooltip.classList.remove('is-show');
+    }
+
+    function showFeedbackTitleTooltip(cell) {
+      if (!isTitleOverflow(cell)) return;
+      activeTitleCell = cell;
+      const target = getTitleOverflowTarget(cell);
+      feedbackTitleTooltip.textContent = target.textContent.trim();
+      feedbackTitleTooltip.classList.add('is-show');
+      const cellRect = target.getBoundingClientRect();
+      const tooltipRect = feedbackTitleTooltip.getBoundingClientRect();
+      const viewportMargin = 24;
+      const preferredLeft = cellRect.left + cellRect.width / 2 - tooltipRect.width / 2;
+      const left = Math.max(viewportMargin, Math.min(preferredLeft, window.innerWidth - tooltipRect.width - viewportMargin));
+      const top = Math.max(viewportMargin, cellRect.top - tooltipRect.height - 14);
+      const arrowLeft = cellRect.left + cellRect.width / 2 - left;
+      feedbackTitleTooltip.style.left = `${left}px`;
+      feedbackTitleTooltip.style.top = `${top}px`;
+      feedbackTitleTooltip.style.setProperty('--tooltip-arrow-left', `${arrowLeft}px`);
+    }
+
+    document.querySelectorAll('#feedback-panel .feedback-table .title-cell').forEach((cell) => {
+      cell.addEventListener('mouseenter', () => showFeedbackTitleTooltip(cell));
+      cell.addEventListener('mouseleave', hideFeedbackTitleTooltip);
+    });
+
+    feedbackTableScrolls.forEach((scrollBox) => {
+      scrollBox.addEventListener('scroll', hideFeedbackTitleTooltip);
+    });
 
     function setRelationMode(mode) {
       claimModal?.classList.toggle('is-bind', mode === 'bind');
@@ -3253,15 +3530,15 @@
       const type = cells[0]?.textContent.trim() || '-';
       const platform = cells[1]?.textContent.trim() || '-';
       const title = cells[2]?.textContent.trim() || '-';
-      const time = cells[4]?.textContent.trim() || '-';
-      const statusText = cells[5]?.textContent.trim() || '-';
-      const handlerText = cells[6]?.textContent.trim() || '-';
-      const updateTime = cells[7]?.textContent.trim() || '-';
-      const id = cells[8]?.textContent.trim() || '-';
-      const statusNode = cloneCellContent(cells[5], '-');
-      const userNode = cloneCellContent(cells[3], '-');
-      const handlerNode = cloneCellContent(cells[6], '-');
-      const processorNode = cloneCellContent(cells[6], '-');
+      const time = cells[5]?.textContent.trim() || '-';
+      const statusText = cells[6]?.textContent.trim() || '-';
+      const handlerText = cells[7]?.textContent.trim() || '-';
+      const updateTime = cells[8]?.textContent.trim() || '-';
+      const id = cells[9]?.textContent.trim() || '-';
+      const statusNode = cloneCellContent(cells[6], '-');
+      const userNode = cloneCellContent(cells[4], '-');
+      const handlerNode = cloneCellContent(cells[7], '-');
+      const processorNode = cloneCellContent(cells[7], '-');
       activeDetailRow = row;
       setDetailField('title', title);
       setDetailField('id', id);
@@ -3282,7 +3559,7 @@
       if (description) {
         description.innerHTML = feedbackDetailDescriptions[title] || `<p>问题现象：${escapeHtml(title)}</p><p>期望效果：请处理人结合反馈内容确认原因，并同步后续处置结论。</p>${buildDetailImages()}`;
       }
-      buildDetailTimeline({ time, handler: handlerText, updateTime, statusText, userNode: cloneCellContent(cells[3], '-'), handlerNode });
+      buildDetailTimeline({ time, handler: handlerText, updateTime, statusText, userNode: cloneCellContent(cells[4], '-'), handlerNode });
       detailDrawer.classList.add('is-open');
       detailDrawer.setAttribute('aria-hidden', 'false');
     }
@@ -3431,6 +3708,13 @@
       viewLink.addEventListener('click', (event) => {
         event.preventDefault();
         openDetailDrawer(viewLink.closest('tr'));
+      });
+    });
+
+    document.querySelectorAll('#feedback-panel .feedback-title-link').forEach((titleLink) => {
+      titleLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        openDetailDrawer(titleLink.closest('tr'));
       });
     });
 
@@ -3594,6 +3878,10 @@
       button.addEventListener('click', closeDetailDrawer);
     });
 
+    document.querySelectorAll('[data-image-preview-close]').forEach((button) => {
+      button.addEventListener('click', closeImagePreview);
+    });
+
     detailAssignButton?.addEventListener('click', () => {
       const row = activeDetailRow;
       closeDetailDrawer();
@@ -3622,6 +3910,10 @@
       if (event.target === detailDrawer) closeDetailDrawer();
     });
 
+    imagePreviewModal?.addEventListener('click', (event) => {
+      if (event.target === imagePreviewModal) closeImagePreview();
+    });
+
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && claimModal?.classList.contains('is-open')) {
         closeClaimModal();
@@ -3634,6 +3926,9 @@
       }
       if (event.key === 'Escape' && detailDrawer?.classList.contains('is-open')) {
         closeDetailDrawer();
+      }
+      if (event.key === 'Escape' && imagePreviewModal?.classList.contains('is-open')) {
+        closeImagePreview();
       }
     });
   </script>
