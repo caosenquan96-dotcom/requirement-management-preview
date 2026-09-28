@@ -1902,8 +1902,8 @@
                   </colgroup>
                   <thead>
                     <tr>
-                      <th class="name-col" style="width: 420px;">名称</th>
-                      <th style="width: 190px;">编号</th>
+                      <th class="name-col" style="width: 420px;">需求名称</th>
+                      <th style="width: 190px;">行云编号</th>
                       <th style="width: 150px;">关联反馈数量</th>
                       <th style="width: 220px;"><span class="sort-head">状态<span class="sort-icon" aria-hidden="true"></span></span></th>
                       <th style="width: 170px;"><span class="sort-head">优先级<span class="sort-icon" aria-hidden="true"></span></span></th>
@@ -2405,7 +2405,7 @@
         </section>
 
         <section class="drawer-card">
-          <h3 class="drawer-section-title">状态流转：</h3>
+          <h3 class="drawer-section-title">动态：</h3>
           <div class="detail-timeline" data-detail-field="timeline">
             <div class="detail-timeline-item"><span class="detail-timeline-time">-</span><span>反馈已提交</span></div>
           </div>
@@ -2560,8 +2560,8 @@
             <textarea class="modal-textarea reject-textarea" id="non-demand-opinion" placeholder="请输入要发送的通知消息内容" required></textarea>
           </label>
           <label class="notify-check non-demand-notify" data-claim-notify hidden>
-            <input type="checkbox" id="claim-jingme-notify" checked />
-            <span>京ME通知</span>
+            <input type="checkbox" id="claim-jingme-notify" />
+            <span>京Me通知反馈用户</span>
           </label>
           <label class="non-demand-status">
             <span class="modal-label">意见反馈状态<span class="required">*</span></span>
@@ -2666,8 +2666,8 @@
       </div>
       <footer class="modal-footer reject-footer">
         <label class="notify-check">
-          <input type="checkbox" id="reject-jingme-notify" checked />
-          <span>京ME通知</span>
+          <input type="checkbox" id="reject-jingme-notify" />
+          <span>京Me通知反馈用户</span>
         </label>
         <span class="modal-actions">
           <button class="modal-btn" type="button" data-reject-modal-close>取消</button>
@@ -3164,7 +3164,7 @@
       if (nonDemandOpinion) nonDemandOpinion.value = '';
       if (feedbackClaimStatus) feedbackClaimStatus.value = '';
       const claimNotifyInput = claimNotify?.querySelector('input');
-      if (claimNotifyInput) claimNotifyInput.checked = true;
+      if (claimNotifyInput) claimNotifyInput.checked = false;
       updateFeedbackTypeView();
       if (isAssign) {
         renderDemandOwnerText('');
@@ -3318,7 +3318,7 @@
 
     function openRejectModal() {
       if (rejectOpinion) rejectOpinion.value = '';
-      if (rejectNotify) rejectNotify.checked = true;
+      if (rejectNotify) rejectNotify.checked = false;
       rejectModal?.classList.add('is-open');
       rejectModal?.setAttribute('aria-hidden', 'false');
       requestAnimationFrame(() => rejectOpinion?.focus());
