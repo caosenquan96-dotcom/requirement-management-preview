@@ -2247,7 +2247,7 @@
                     <input class="date-range-input" type="text" placeholder="结束时间" aria-label="反馈结束时间" />
                   </span>
                 </label>
-                <label class="filter-item">
+                <label class="filter-item extra-filter-item" data-extra-filter hidden>
                   <span class="filter-label">更新时间</span>
                   <span class="date-range">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2259,12 +2259,19 @@
                     <input class="date-range-input" type="text" placeholder="结束时间" aria-label="更新结束时间" />
                   </span>
                 </label>
-                <label class="filter-item">
+                <label class="filter-item extra-filter-item" data-extra-filter hidden>
                   <span class="filter-label">反馈单号</span>
                   <input class="filter-input" type="search" placeholder="请输入反馈单号" />
                 </label>
               </div>
               <div class="filter-actions">
+                <button class="filter-btn filter-toggle-btn" type="button" data-filter-toggle aria-expanded="false">
+                  <svg class="filter-toggle-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2.2 3.7 7 8.5l4.8-4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.2 8.1 7 12.9l4.8-4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span data-filter-toggle-text>更多筛选</span>
+                </button>
                 <button class="filter-btn" type="button" data-clear-relation-filter>重置</button>
                 <button class="filter-btn primary" type="button">查询</button>
                 <button class="filter-btn primary" type="button" data-new-feedback-open>+ 新建反馈</button>
@@ -3108,6 +3115,7 @@
     const initialFeedbackRows = Array.from(feedbackRows);
     const relationInput = document.querySelector('[data-relation-input]');
     const relationClearButton = document.querySelector('[data-clear-relation-filter]');
+    const filterToggleButtons = document.querySelectorAll('[data-filter-toggle]');
     const paginationTotal = document.querySelector('[data-pagination-total]');
     const paginationPages = document.querySelector('[data-pagination-pages]');
     const paginationPrev = document.querySelector('[data-pagination-prev]');
@@ -3391,6 +3399,19 @@
     });
 
     relationClearButton?.addEventListener('click', resetFeedbackInitialState);
+
+    filterToggleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        const nextExpanded = !expanded;
+        button.setAttribute('aria-expanded', String(nextExpanded));
+        document.querySelectorAll('[data-extra-filter]').forEach((item) => {
+          item.hidden = !nextExpanded;
+        });
+        const filterToggleText = button.querySelector('[data-filter-toggle-text]');
+        if (filterToggleText) filterToggleText.textContent = nextExpanded ? '收起筛选' : '更多筛选';
+      });
+    });
 
     relationInput?.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter') return;
