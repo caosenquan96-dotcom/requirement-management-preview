@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JoyWorker - 需求管理</title>
+  <title>前台意见反馈</title>
   <style>
     :root {
       --brand: #6b63ff;
@@ -504,10 +504,6 @@
       gap: 18px 24px;
       align-items: center;
     }
-    .feedback-filter-grid {
-      grid-template-columns: 1.15fr 1.15fr 1.15fr 1.15fr;
-      gap: 18px 24px;
-    }
     .filter-item {
       min-width: 0;
       display: grid;
@@ -658,19 +654,47 @@
       justify-content: center;
       gap: 8px;
     }
+    .department-suggest-popover {
+      position: fixed;
+      z-index: 10002;
+      display: none;
+      width: 360px;
+      max-width: none;
+      max-height: min(260px, calc(100vh - 48px));
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: 1px solid #e4e8f0;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 18px 46px rgba(24, 35, 64, .18);
+      padding: 6px 0;
+    }
+    .department-suggest-popover.is-open { display: block; }
+    .department-option {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 0;
+      background: #fff;
+      color: #2f3542;
+      text-align: left;
+      font: inherit;
+      line-height: 22px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .department-option:hover { background: #f6f8ff; color: #2f3542; }
     @container (max-width: 1407px) {
-      .filter-grid,
-      .feedback-filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .feedback-filter.is-collapsed .filter-grid > .filter-item:nth-child(n+7) { display: none; }
     }
     @container (max-width: 1049px) {
-      .filter-grid,
-      .feedback-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .feedback-filter.is-collapsed .filter-grid > .filter-item:nth-child(n+5) { display: none; }
     }
     @container (max-width: 691px) {
-      .filter-grid,
-      .feedback-filter-grid { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
       .feedback-filter.is-collapsed .filter-grid > .filter-item:nth-child(n+3) { display: none; }
     }
     .feedback-table-wrap {
@@ -689,7 +713,7 @@
       cursor: grab;
     }
     .feedback-table-scroll.is-panning { cursor: grabbing; user-select: none; }
-    .feedback-table { min-width: 1920px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+    .feedback-table { min-width: 1750px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
     .feedback-table th,
     .feedback-table td {
       height: 60px;
@@ -966,7 +990,7 @@
     .feedback-table th.is-resizing .col-resizer::after { background: #737bff; }
     body.col-resizing { cursor: col-resize; user-select: none; }
     .demand-page { padding-top: 0; background: transparent; min-height: calc(100vh - 116px); }
-    .demand-table { min-width: 2270px; }
+    .demand-table { min-width: 1880px; }
     .demand-table th { color: #5f6878; background: #f7f8fb; }
     .demand-table .name-col,
     .demand-table .name-cell { position: sticky; left: 0; z-index: 2; }
@@ -992,31 +1016,6 @@
       gap: 8px;
       max-width: 100%;
     }
-    .iteration-version {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      max-width: 100%;
-      white-space: nowrap;
-    }
-    .xbp-id {
-      color: #5f68f7;
-      font-weight: 500;
-    }
-    .xbp-status {
-      display: inline-flex;
-      align-items: center;
-      height: 24px;
-      padding: 0 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .xbp-status.processing { color: #2f8dfb; background: #edf5ff; }
-    .xbp-status.done { color: #0fb27b; background: #eefaf6; }
-    .xbp-status.rejected { color: #ff5d66; background: #fff1f5; }
-    .xbp-status.canceled { color: #8d95a2; background: #f3f5f8; }
     .copy-id-btn {
       width: 24px;
       height: 24px;
@@ -1097,7 +1096,6 @@
       flex: 0 0 auto;
     }
     .demand-status.prd { --status-color: #bd6bd6; }
-    .demand-status.dev { --status-color: #2f8dfb; }
     .demand-status.done { --status-color: #58c91b; }
     .status-extra {
       display: inline-flex;
@@ -1401,7 +1399,7 @@
       width: 760px;
       max-width: calc(100vw - 48px);
       height: 690px;
-      min-height: 0;
+      min-height: 690px;
       max-height: calc(100vh - 48px);
       background: #fff;
       border-radius: 12px;
@@ -1420,6 +1418,26 @@
     }
     .reject-modal {
       width: 640px;
+      max-width: calc(100vw - 48px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 24px 72px rgba(19, 27, 55, .24);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .delete-confirm-modal {
+      width: 420px;
+      max-width: calc(100vw - 48px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 24px 72px rgba(19, 27, 55, .24);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .new-feedback-modal {
+      width: 720px;
       max-width: calc(100vw - 48px);
       background: #fff;
       border-radius: 12px;
@@ -1449,15 +1467,7 @@
       cursor: pointer;
     }
     .modal-close:hover { background: #f3f5fb; color: #6e70ff; }
-    .modal-header,
-    .modal-footer { flex: 0 0 auto; }
-    .modal-body {
-      flex: 1 1 auto;
-      min-height: 0;
-      padding: 20px 22px 12px;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
+    .modal-body { flex: 1; padding: 20px 22px 12px; overflow: hidden; }
     .modal-backdrop.is-bind .modal-body {
       display: flex;
       flex-direction: column;
@@ -1504,36 +1514,70 @@
     .modal-select:required:invalid,
     .modal-select.is-placeholder { color: #a8afbd; }
     .modal-select option { color: #303849; }
-    .version-select {
-      position: relative;
-      display: block;
-      width: 100%;
+    .modal-textarea { height: 96px; padding: 10px 12px; resize: vertical; }
+    .new-feedback-modal .modal-body { overflow: auto; }
+    .new-feedback-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 18px;
     }
-    .version-select .modal-select { color: transparent; }
-    .version-select .modal-select option {
-      color: #303849;
-      font-weight: 400;
+    .new-feedback-grid .wide { grid-column: 1 / -1; }
+    .rich-editor {
+      border: 1px solid #dfe6f3;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+      transition: border-color .16s ease, box-shadow .16s ease;
     }
-    .version-select-value {
-      position: absolute;
-      top: 0;
-      right: 40px;
-      bottom: 0;
-      left: 12px;
+    .rich-editor:focus-within { border-color: #2f8dfb; box-shadow: 0 0 0 3px rgba(47, 141, 251, .12); }
+    .rich-toolbar {
+      height: 52px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 10px;
+      border-bottom: 1px solid #edf1f7;
+      background: #fbfcff;
+    }
+    .rich-tool-btn {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid #d8e0ef;
+      border-radius: 8px;
+      color: #111827;
+      background: #fff;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .rich-tool-btn:hover { border-color: #737bff; color: #737bff; }
+    .rich-tool-btn.bold { font-weight: 900; }
+    .rich-tool-btn.italic { font-style: italic; }
+    .rich-tool-btn.underline { text-decoration: underline; }
+    .rich-editor-input {
+      min-height: 170px;
+      padding: 22px 20px;
       color: #303849;
+      outline: none;
+      background: #fff;
+      overflow: auto;
+    }
+    .rich-editor-input:empty::before {
+      content: attr(data-placeholder);
+      color: #9aa4b5;
       pointer-events: none;
     }
-    .version-select-name { font-weight: 700; }
-    .version-select-date {
-      color: rgba(0, 0, 0, .65);
-      font-weight: 400;
+    .rich-editor-input img {
+      max-width: 180px;
+      max-height: 120px;
+      margin: 8px 8px 0 0;
+      border: 1px solid #e3e8f2;
+      border-radius: 8px;
+      vertical-align: top;
     }
-    .modal-textarea { height: 96px; padding: 10px 12px; resize: vertical; }
+    .rich-image-input { display: none; }
     #demand-description { height: 66px; min-height: 66px; }
-    .modal-backdrop.is-new-demand #demand-description { height: 120px; min-height: 120px; }
     .reject-textarea { height: 160px; }
     .modal-input:focus,
     .modal-select:focus,
@@ -1758,6 +1802,13 @@
       cursor: pointer;
     }
     .modal-btn.primary { border-color: #2f8dfb; background: #2f8dfb; color: #fff; }
+    .modal-btn.danger { border-color: #ff5d66; background: #ff5d66; color: #fff; }
+    .delete-confirm-text {
+      margin: 0;
+      color: #303849;
+      font-size: 16px;
+      line-height: 26px;
+    }
     .person-popover {
       position: fixed;
       z-index: 10001;
@@ -1775,6 +1826,46 @@
     .person-popover.input-suggest .selected-count { display: none; }
     .person-popover.input-suggest .person-option { align-items: flex-start; }
     .person-popover.input-suggest .person-info span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .person-popover.filter-user-suggest {
+      border-radius: 14px;
+      box-shadow: 0 18px 46px rgba(24, 35, 64, .14);
+      max-width: none;
+      overflow: visible;
+    }
+    .person-popover.filter-user-suggest .person-list {
+      max-height: 360px;
+      overflow-x: visible;
+      border-top: 0;
+      padding: 18px 0;
+    }
+    .person-popover.filter-user-suggest .person-option {
+      min-height: 72px;
+      padding: 8px 32px;
+      gap: 18px;
+    }
+    .person-popover.filter-user-suggest .person-avatar {
+      flex-basis: 42px;
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
+    }
+    .person-popover.filter-user-suggest .person-info { flex: 0 0 auto; min-width: max-content; }
+    .person-popover.filter-user-suggest .person-info strong {
+      font-size: 18px;
+      line-height: 24px;
+      font-weight: 500;
+      overflow: visible;
+      text-overflow: clip;
+      white-space: nowrap;
+    }
+    .person-popover.filter-user-suggest .person-info span {
+      font-size: 16px;
+      line-height: 24px;
+      color: #8d8f96;
+      overflow: visible;
+      text-overflow: clip;
+      white-space: nowrap;
+    }
     .person-option[hidden] { display: none; }
     .person-search {
       margin: 14px 16px 12px;
@@ -2021,343 +2112,219 @@
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .feedback-layout { grid-template-columns: 1fr; }
     }
+
+
+    /* 前台意见反馈页面：外层社区布局；反馈表格内容、样式和交互继承 index.html */
+    body {
+      min-width: 1280px;
+      background:
+        radial-gradient(circle at 52% 0%, rgba(116, 104, 255, .10), transparent 30%),
+        linear-gradient(180deg, #fbfbff 0%, #f6f7ff 100%);
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(90deg, #f0f2fd 0 232px, transparent 232px);
+    }
+
+    .sidebar {
+      width: 232px;
+      flex: 0 0 232px;
+      background: #f0f2fd;
+    }
+
+    .sidebar-fill {
+      flex: 1;
+      margin-top: 8px;
+      background: linear-gradient(180deg, rgba(234, 237, 249, .9), rgba(244, 246, 255, .74));
+    }
+
+    .workspace {
+      flex: 1;
+      min-width: 0;
+      padding: 22px 24px 20px;
+      overflow: hidden;
+    }
+
+    .community-card {
+      min-height: calc(100vh - 42px);
+      overflow: hidden;
+      border: 1px solid rgba(238, 241, 250, .92);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 16px 44px rgba(92, 101, 152, .10);
+      backdrop-filter: blur(12px);
+    }
+
+    .front-topbar {
+      height: 92px;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, .92);
+      border-bottom: 1px solid rgba(236, 238, 246, .94);
+    }
+
+    .front-topbar .tabs {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 42px;
+    }
+
+    .front-topbar .tab-btn {
+      position: relative;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      display: inline-flex;
+      align-items: center;
+      color: #4c5364;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: default;
+    }
+
+    .front-topbar .tab-btn.active { color: var(--brand); }
+
+    .front-topbar .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      border-radius: 999px 999px 0 0;
+      background: var(--brand);
+    }
+
+    .main-panel {
+      padding: 26px 24px 28px;
+      min-height: calc(100vh - 134px);
+      background: rgba(247, 248, 255, .66);
+    }
+
+    .feedback-page { min-height: auto; }
+
+    .feedback-filter {
+      border-radius: 16px;
+      box-shadow: 0 14px 34px rgba(34, 43, 69, .07);
+    }
+
+    .feedback-table-wrap {
+      padding: 24px 24px 0;
+      border-radius: 16px;
+      box-shadow: 0 14px 34px rgba(34, 43, 69, .07);
+    }
+
+    .feedback-table-scroll {
+      min-height: 420px;
+      max-height: calc(100vh - 430px);
+      border: 1px solid #eef1f7;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .table-pagination { padding-right: 0; }
+    .table-pagination [data-pagination-pages] { display: inline-flex; align-items: center; gap: 8px; }
+    .row-actions .delete { color: #ff5d66; }
+    .drawer-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .drawer-section-head .drawer-section-title { margin: 0; }
+    .detail-edit-btn {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border: 1px solid var(--brand);
+      border-radius: 6px;
+      color: #fff;
+      background: var(--brand);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .detail-edit-btn:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+    .detail-edit-btn[hidden] { display: none; }
+    .detail-edit-wrap { display: grid; gap: 10px; }
+    .detail-edit-textarea {
+      width: 100%;
+      min-height: 138px;
+      padding: 10px 12px;
+      border: 1px solid #dfe3ee;
+      border-radius: 8px;
+      color: #2f3547;
+      background: #fff;
+      outline: none;
+      resize: vertical;
+    }
+    .detail-edit-textarea:focus { border-color: #737bff; box-shadow: 0 0 0 3px rgba(115, 123, 255, .12); }
+    .detail-edit-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
   </style>
 </head>
 <body>
   <div class="toast" id="copy-toast" role="status" aria-live="polite">复制成功</div>
+  <div class="department-suggest-popover" id="department-suggest-popover" aria-hidden="true"></div>
   <div class="app">
+    <aside class="sidebar" aria-label="JoyWorker 侧边栏">
+      <div class="logo-row">
+        <div class="logo" aria-label="JoyWorker">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="18" fill="#fff" opacity=".96"/>
+              <path d="M12.5 21.5c0-6 4.2-10.6 10-10.6 4.1 0 7.5 2.1 9.1 5.4" stroke="#2578ff" stroke-width="3" stroke-linecap="round"/>
+              <path d="M27.9 26.7c-1.7 1.7-3.9 2.7-6.3 2.7-3.7 0-6.8-2.2-8.1-5.4" stroke="#7568ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="13" cy="14" r="3" fill="#22c7ff"/>
+              <circle cx="30" cy="21" r="3" fill="#7568ff"/>
+              <circle cx="18" cy="29" r="2.5" fill="#38d6a7"/>
+            </svg>
+          </span>
+          <span class="logo-text"><span>JOY</span><span>Worker</span></span>
+        </div>
+        <button class="sidebar-toggle" type="button" aria-label="收起菜单">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-fill" aria-hidden="true"></div>
+      <div class="sidebar-bottom">
+        <a class="minor-link" href="#community">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5.8h14v9.7H9.7L5 19.2V5.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 9.4h6.8M8.6 12.3h4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          社区
+        </a>
+        <div class="user-card"><span class="avatar" aria-hidden="true">曹</span><span class="user-name">曹森泉</span></div>
+      </div>
+    </aside>
+
     <main class="workspace">
-      <section class="top-card">
-        <header class="topbar">
-          <div class="top-nav-left">
-            <div class="top-logo logo" aria-label="JoyWorker">
-              <span class="logo-mark" aria-hidden="true">
-                <svg viewBox="0 0 40 40" fill="none">
-                  <circle cx="20" cy="20" r="16" fill="white" opacity=".95"/>
-                  <circle cx="14" cy="17" r="2.4" fill="#2368ff"/>
-                  <circle cx="26" cy="17" r="2.4" fill="#2368ff"/>
-                  <path d="M13 24c3.8 4 10.2 4 14 0" stroke="#2368ff" stroke-width="2.4" stroke-linecap="round"/>
-                  <path d="M8 20h-2m28 0h-2" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="logo-text"><span>JOY</span><span>Worker</span></span>
-            </div>
-            <div class="top-product">数字员工<br>运维工作台</div>
-            <div class="tabs" role="tablist" aria-label="顶部导航">
-              <button class="tab-btn" type="button">工作台</button>
-              <button class="tab-btn" type="button">员工管理</button>
-              <button class="tab-btn" type="button">数字工厂</button>
-              <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-panel="feedback">意见反馈</button>
-              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-panel="demand">需求管理</button>
-              <button class="tab-btn" type="button">性能检验</button>
-            </div>
-          </div>
-          <div class="top-actions">
-            <label class="top-search" aria-label="全局搜索">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <input type="search" placeholder="搜索员工 / 工单 / 告警" />
-            </label>
-            <span class="top-user"><span class="avatar" aria-hidden="true">曹</span>曹森泉⌄</span>
+      <section class="community-card" aria-label="社区">
+        <header class="front-topbar">
+          <div class="tabs" role="tablist" aria-label="顶部导航">
+            <button class="tab-btn" type="button">神灯畅聊</button>
+            <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-panel="feedback">意见反馈管理</button>
+            <button class="tab-btn" type="button">统计分析</button>
+            <button class="tab-btn" type="button">个人贡献榜</button>
           </div>
         </header>
 
         <div class="main-panel">
-          <section class="panel-view demand-page" id="demand-panel" data-view="demand">
-            <div class="feedback-filter is-collapsed" aria-label="行云需求筛选条件">
+<section class="panel-view active feedback-page" id="feedback-panel" data-view="feedback">
+            <div class="feedback-filter is-collapsed" aria-label="意见反馈筛选条件">
               <div class="filter-grid">
                 <label class="filter-item">
-                  <span class="filter-label">需求名称</span>
-                  <input class="filter-input" type="search" placeholder="请输入需求名称" />
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">行云编号</span>
-                  <input class="filter-input" type="search" placeholder="请输入行云编号" />
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">行云状态</span>
-                  <select class="filter-select">
-                    <option value="">请选择行云状态</option>
-                    <option>方案/PRD设计</option>
-                    <option>开发设计</option>
-                    <option>开发中</option>
-                    <option>联调中</option>
-                    <option>待测试</option>
-                    <option>测试中</option>
-                    <option>待上线</option>
-                    <option>上线中</option>
-                    <option>上线完成</option>
-                    <option>完成</option>
-                  </select>
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">优先级</span>
-                  <select class="filter-select">
-                    <option value="">请选择优先级</option>
-                    <option>P0</option>
-                    <option>P1</option>
-                    <option>P2</option>
-                    <option>P3</option>
-                    <option>P4</option>
-                  </select>
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">处理人</span>
-                  <input class="filter-input" type="search" placeholder="请输入ERP/姓名搜索" />
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">创建时间</span>
-                  <span class="date-range">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 3v3M17 3v3M4.5 9h15M6 5.5h12A1.5 1.5 0 0 1 19.5 7v11A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18V7A1.5 1.5 0 0 1 6 5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M8 12h2M12 12h2M16 12h1M8 15.5h2M12 15.5h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    </svg>
-                    <input class="date-range-input" type="text" placeholder="选择开始日期" aria-label="创建开始时间" />
-                    <span class="date-separator">-</span>
-                    <input class="date-range-input" type="text" placeholder="选择结束日期" aria-label="创建结束时间" />
-                  </span>
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">迭代版本号</span>
-                  <select class="filter-select">
-                    <option value="">请选择迭代版本号</option>
-                    <option>V 1.4.5（2026-10-08上线）</option>
-                    <option>V 1.4.6（2026-10-15上线）</option>
-                    <option>V 1.4.7（2026-10-22上线）</option>
-                    <option>V 1.4.8（2026-10-29上线）</option>
-                  </select>
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">计划上线</span>
-                  <span class="date-range">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 3v3M17 3v3M4.5 9h15M6 5.5h12A1.5 1.5 0 0 1 19.5 7v11A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18V7A1.5 1.5 0 0 1 6 5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M8 12h2M12 12h2M16 12h1M8 15.5h2M12 15.5h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    </svg>
-                    <input class="date-range-input" type="text" placeholder="选择开始日期" aria-label="计划上线开始时间" />
-                    <span class="date-separator">-</span>
-                    <input class="date-range-input" type="text" placeholder="选择结束日期" aria-label="计划上线结束时间" />
-                  </span>
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">XBP申请ID</span>
-                  <input class="filter-input" type="search" placeholder="请输入XBP申请ID" />
-                </label>
-                <label class="filter-item">
-                  <span class="filter-label">XBP状态</span>
-                  <select class="filter-select">
-                    <option value="">请选择XBP状态</option>
-                    <option>驳回</option>
-                    <option>处理中</option>
-                    <option>已完成</option>
-                    <option>已撤销</option>
-                  </select>
-                </label>
-              </div>
-              <div class="filter-actions">
-                <button class="filter-btn filter-toggle-btn" type="button" data-filter-toggle aria-expanded="false">
-                  <svg class="filter-toggle-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.2 3.7 7 8.5l4.8-4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M2.2 8.1 7 12.9l4.8-4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <span data-filter-toggle-text>展开筛选</span>
-                </button>
-                <button class="filter-btn" type="button">重置</button>
-                <button class="filter-btn primary" type="button">查询</button>
-                <button class="filter-btn primary" type="button" data-create-demand>+新建需求</button>
-              </div>
-            </div>
-
-            <div class="feedback-table-wrap">
-              <div class="feedback-table-scroll demand-table-scroll">
-                <table class="feedback-table demand-table" aria-label="行云需求管理列表">
-                  <colgroup>
-                    <col style="width: 420px;" />
-                    <col style="width: 190px;" />
-                    <col style="width: 150px;" />
-                    <col style="width: 218px;" />
-                    <col style="width: 128px;" />
-                    <col style="width: 220px;" />
-                    <col style="width: 172px;" />
-                    <col style="width: 172px;" />
-                    <col style="width: 190px;" />
-                    <col style="width: 150px;" />
-                    <col style="width: 150px;" />
-                    <col style="width: 110px;" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th class="name-col" style="width: 420px;">需求名称</th>
-                      <th style="width: 190px;">行云编号</th>
-                      <th style="width: 150px;">关联反馈数量</th>
-                      <th style="width: 218px;">迭代版本号</th>
-                      <th style="width: 128px;"><span class="sort-head">优先级<span class="sort-icon" aria-hidden="true"></span></span></th>
-                      <th style="width: 220px;"><span class="sort-head">行云状态<span class="sort-icon" aria-hidden="true"></span></span></th>
-                      <th style="width: 172px;">任务处理人</th>
-                      <th style="width: 172px;"><span class="sort-head">创建时间<span class="sort-icon" aria-hidden="true"></span></span></th>
-                      <th style="width: 190px;"><span class="sort-head">计划上线日期<span class="sort-icon" aria-hidden="true"></span></span></th>
-                      <th style="width: 150px;">XBP申请ID</th>
-                      <th style="width: 150px;">XBP状态</th>
-                      <th class="action-col" style="width: 110px;">操作</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="name-cell">规则平台-支持规则告警通知京Me群</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026081582825</a><button class="copy-id-btn" type="button" data-copy-value="R2026081582825" aria-label="复制编号 R2026081582825"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026081582825" data-demand-name="规则平台-支持规则告警通知京Me群">3</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p0" aria-hidden="true"></span>P0</span></td>
-                      <td><span class="demand-status prd">方案/PRD设计</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-wang">沈</span><span class="user-avatar avatar-feng">马</span><span class="user-avatar avatar-liu">仓</span><span class="user-avatar avatar-shen">郎</span><span class="user-avatar avatar-basic">智</span></span></td>
-                      <td>2026-08-15 14:30</td>
-                      <td></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">数字员工工厂管理菜单列表页-数字员工ID检索改为远程搜索下拉框</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026090983660</a><button class="copy-id-btn" type="button" data-copy-value="R2026090983660" aria-label="复制编号 R2026090983660"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026090983660" data-demand-name="数字员工工厂管理菜单列表页-数字员工ID检索改为远程搜索下拉框">8</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p1" aria-hidden="true"></span>P1</span></td>
-                      <td><span class="demand-status done">上线完成</span><span class="status-extra">待业务验收</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="user-avatar avatar-cao">沈</span></span></td>
-                      <td>2026-09-09 13:06</td>
-                      <td>2026-09-16</td>
-                      <td><span class="demand-code"><a class="demand-id-link xbp-id" href="#detail">57358699</a><button class="copy-id-btn" type="button" data-copy-value="57358699" aria-label="复制XBP申请ID 57358699"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><span class="xbp-status done">已完成</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">黑洞网关PC端京东PIN登录态解析器升级治理</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026090986328</a><button class="copy-id-btn" type="button" data-copy-value="R2026090986328" aria-label="复制编号 R2026090986328"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026090986328" data-demand-name="黑洞网关PC端京东PIN登录态解析器升级治理">12</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.6</span><span class="version-select-date">（2026-10-15上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p2" aria-hidden="true"></span>P2</span></td>
-                      <td><span class="demand-status done">完成</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="user-avatar avatar-guo">郭</span><span class="user-avatar avatar-test">图</span></span></td>
-                      <td>2026-09-09 15:23</td>
-                      <td>2026-09-15</td>
-                      <td><span class="demand-code"><a class="demand-id-link xbp-id" href="#detail">57358699</a><button class="copy-id-btn" type="button" data-copy-value="57358699" aria-label="复制XBP申请ID 57358699"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><span class="xbp-status done">已完成</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">工作流-增加详情页</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026091672543</a><button class="copy-id-btn" type="button" data-copy-value="R2026091672543" aria-label="复制编号 R2026091672543"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026091672543" data-demand-name="工作流-增加详情页">5</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.7</span><span class="version-select-date">（2026-10-22上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p3" aria-hidden="true"></span>P3</span></td>
-                      <td><span class="demand-status prd">方案/PRD设计</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="assignee-name">基础保障003号</span></span></td>
-                      <td>2026-09-16 20:20</td>
-                      <td></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">规则平台-风险治理-规则冲突敏感数据脱敏</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026091888052</a><button class="copy-id-btn" type="button" data-copy-value="R2026091888052" aria-label="复制编号 R2026091888052"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026091888052" data-demand-name="规则平台-风险治理-规则冲突敏感数据脱敏">7</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.8</span><span class="version-select-date">（2026-10-29上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p4" aria-hidden="true"></span>P4</span></td>
-                      <td><span class="demand-status prd">方案/PRD设计</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="assignee-name">基础保障003号</span></span></td>
-                      <td>2026-09-18 09:18</td>
-                      <td></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">完善SSO机制、分组机制及审计数据机制</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026092471592</a><button class="copy-id-btn" type="button" data-copy-value="R2026092471592" aria-label="复制编号 R2026092471592"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026092471592" data-demand-name="完善SSO机制、分组机制及审计数据机制">2</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p2" aria-hidden="true"></span>P2</span></td>
-                      <td><span class="demand-status done">完成</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-cao">曹</span><span class="assignee-name">曹森泉</span></span></td>
-                      <td>2026-09-24 11:12</td>
-                      <td>2026-10-08</td>
-                      <td><span class="demand-code"><a class="demand-id-link xbp-id" href="#detail">57358699</a><button class="copy-id-btn" type="button" data-copy-value="57358699" aria-label="复制XBP申请ID 57358699"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><span class="xbp-status processing">处理中</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">技能市场页面增加「去发布」按钮跳转技能发布页</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026091892113</a><button class="copy-id-btn" type="button" data-copy-value="R2026091892113" aria-label="复制编号 R2026091892113"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026091892113" data-demand-name="技能市场页面增加「去发布」按钮跳转技能发布页">4</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.6</span><span class="version-select-date">（2026-10-15上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p1" aria-hidden="true"></span>P1</span></td>
-                      <td><span class="demand-status prd">方案/PRD设计</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-shen">沈</span><span class="assignee-name">沈括</span></span></td>
-                      <td>2026-09-24 15:28</td>
-                      <td>2026-10-15</td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">DB/Network/R2M/JMQ 前端迁移开发</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026091097315</a><button class="copy-id-btn" type="button" data-copy-value="R2026091097315" aria-label="复制编号 R2026091097315"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026091097315" data-demand-name="DB/Network/R2M/JMQ 前端迁移开发">6</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.7</span><span class="version-select-date">（2026-10-22上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p3" aria-hidden="true"></span>P3</span></td>
-                      <td><span class="demand-status dev">开发中</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-zhu">朱</span><span class="assignee-name">朱欣鑫</span></span></td>
-                      <td>2026-09-25 10:06</td>
-                      <td>2026-10-22</td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">应用覆盖率查询接口开发</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026090322636</a><button class="copy-id-btn" type="button" data-copy-value="R2026090322636" aria-label="复制编号 R2026090322636"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026090322636" data-demand-name="应用覆盖率查询接口开发">9</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.8</span><span class="version-select-date">（2026-10-29上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p2" aria-hidden="true"></span>P2</span></td>
-                      <td><span class="demand-status dev">开发中</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-li">李</span><span class="assignee-name">李铁</span></span></td>
-                      <td>2026-09-25 16:42</td>
-                      <td>2026-10-29</td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-                    <tr>
-                      <td class="name-cell">优化 TestingDomainService#ensureAppRelations 方法</td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026090321692</a><button class="copy-id-btn" type="button" data-copy-value="R2026090321692" aria-label="复制编号 R2026090321692"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><button class="count-pill" type="button" data-demand-feedback="R2026090321692" data-demand-name="优化 TestingDomainService#ensureAppRelations 方法">1</button></td>
-                      <td><span class="iteration-version"><span class="version-select-name">V 1.4.6</span><span class="version-select-date">（2026-10-15上线）</span></span></td>
-                      <td><span class="priority-value"><span class="priority-icon priority-p4" aria-hidden="true"></span>P4</span></td>
-                      <td><span class="demand-status done">完成</span></td>
-                      <td><span class="avatar-stack"><span class="user-avatar avatar-yu">于</span><span class="assignee-name">于坤</span></span></td>
-                      <td>2026-09-26 09:35</td>
-                      <td>2026-10-15</td>
-                      <td><span class="demand-code"><a class="demand-id-link xbp-id" href="#detail">57358699</a><button class="copy-id-btn" type="button" data-copy-value="57358699" aria-label="复制XBP申请ID 57358699"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td><span class="xbp-status rejected">驳回</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#detail">查看</a></span></td>
-                    </tr>
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          <section class="panel-view active feedback-page" id="feedback-panel" data-view="feedback">
-            <div class="feedback-filter is-collapsed" aria-label="意见反馈筛选条件">
-              <div class="filter-grid feedback-filter-grid">
-                <label class="filter-item">
                   <span class="filter-label">反馈用户</span>
-                  <input class="filter-input" type="search" placeholder="请输入ERP/姓名搜索" />
+                  <input class="filter-input" type="search" placeholder="请输入ERP/姓名搜索" autocomplete="off" data-feedback-user-input />
                 </label>
                 <label class="filter-item">
                   <span class="filter-label">反馈人部门</span>
-                  <input class="filter-input" type="search" placeholder="请输入反馈人部门" />
+                  <input class="filter-input" type="search" placeholder="请输入反馈人部门" autocomplete="off" data-department-input />
                 </label>
                 <label class="filter-item">
                   <span class="filter-label">所属平台</span>
@@ -2406,34 +2373,23 @@
                     <input class="date-range-input" type="text" placeholder="结束时间" aria-label="反馈结束时间" />
                   </span>
                 </label>
-                <label class="filter-item extra-filter-item">
-                  <span class="filter-label">关联行云</span>
-                  <input class="filter-input relation-input" data-relation-input type="search" placeholder="请输入行云编号" />
-                </label>
-                <label class="filter-item extra-filter-item">
-                  <span class="filter-label">认领时间</span>
+                <label class="filter-item">
+                  <span class="filter-label">更新时间</span>
                   <span class="date-range">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/>
                       <path d="M12 7.5v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <input class="date-range-input" type="text" placeholder="开始时间" aria-label="认领开始时间" />
+                    <input class="date-range-input" type="text" placeholder="开始时间" aria-label="更新开始时间" />
                     <span class="date-separator">-</span>
-                    <input class="date-range-input" type="text" placeholder="结束时间" aria-label="认领结束时间" />
+                    <input class="date-range-input" type="text" placeholder="结束时间" aria-label="更新结束时间" />
                   </span>
                 </label>
-                <label class="filter-item extra-filter-item">
-                  <span class="filter-label">完成时间</span>
-                  <span class="date-range">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/>
-                      <path d="M12 7.5v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <input class="date-range-input" type="text" placeholder="开始时间" aria-label="完成开始时间" />
-                    <span class="date-separator">-</span>
-                    <input class="date-range-input" type="text" placeholder="结束时间" aria-label="完成结束时间" />
-                  </span>
-                </label></div>
+                <label class="filter-item">
+                  <span class="filter-label">反馈单号</span>
+                  <input class="filter-input" type="search" placeholder="请输入反馈单号" />
+                </label>
+              </div>
               <div class="filter-actions">
                 <button class="filter-btn filter-toggle-btn" type="button" data-filter-toggle aria-expanded="false">
                   <svg class="filter-toggle-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -2444,6 +2400,7 @@
                 </button>
                 <button class="filter-btn" type="button" data-clear-relation-filter>重置</button>
                 <button class="filter-btn primary" type="button">查询</button>
+                <button class="filter-btn primary" type="button" data-new-feedback-open>+ 新建反馈</button>
               </div>
             </div>
 
@@ -2451,8 +2408,8 @@
               <div class="feedback-table-scroll">
                 <table class="feedback-table" aria-label="意见反馈管理列表">
                   <colgroup>
-                    <col style="width: 110px;" />
                     <col style="width: 120px;" />
+                    <col style="width: 110px;" />
                     <col style="width: 380px;" />
                     <col style="width: 144px;" />
                     <col style="width: 130px;" />
@@ -2461,29 +2418,29 @@
                     <col style="width: 130px;" />
                     <col style="width: 190px;" />
                     <col style="width: 230px;" />
-                    <col style="width: 170px;" />
-                    <col style="width: 180px;" />
+                    <col style="width: 150px;" />
+                    <col style="width: 120px;" />
                   </colgroup>
                   <thead>
                     <tr>
-                      <th style="width: 110px;">意见类型</th>
                       <th style="width: 120px;">所属平台</th>
+                      <th style="width: 110px;">意见类型</th>
                       <th class="title-col">标题</th>
                       <th class="image-col" style="width: 144px;">图片详情</th>
                       <th style="width: 130px;">反馈用户</th>
                       <th style="width: 170px;">反馈时间</th>
                       <th style="width: 110px;">状态</th>
                       <th style="width: 130px;">处理人</th>
-                      <th style="width: 190px;">上次状态更新时间</th>
+                      <th style="width: 190px;">上次更新时间</th>
                       <th style="width: 230px;">反馈单号</th>
-                      <th style="width: 170px;">关联行云编号</th>
-                      <th class="action-col" style="width: 180px;">操作</th>
+                      <th style="width: 150px;">反馈人部门</th>
+                      <th class="action-col" style="width: 120px;">操作</th>
                     </tr>
                   </thead>
                                                                         <tbody>
-                    <tr>
-                      <td>体验提升</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工交付详情列表排序不明确且不稳定</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button><button class="feedback-image-thumb image-3" type="button" title="预览图片 3" aria-label="预览图片 3" data-preview-image="assets/feedback-preview-3.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-guo">郭</span>郭帅</span></td>
@@ -2492,40 +2449,40 @@
                       <td></td>
                       <td></td>
                       <td><span class="feedback-id">FB20260924104145089256</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="claim" href="#claim">认领</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>JoyAI产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026090983660">
-                      <td>Bug修复</td>
                       <td>JoyWorker</td>
+                      <td>Bug修复</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">@数字人结项，结项失败，且失败记录为空，也看不到对应的会话记录</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-user"><span class="user-avatar avatar-guo">郭</span>郭帅</span></td>
+                      <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-23 18:45</td>
                       <td><span class="feedback-status pending">待处理</span></td>
                       <td></td>
                       <td></td>
                       <td><span class="feedback-id">FB20260923184504097869</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="claim" href="#claim">认领</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>AI效能</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a><a class="delete" href="#delete">删除</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026090986328">
-                      <td>新增功能</td>
                       <td>JoyWorker</td>
+                      <td>新增功能</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">仓颉提bug，提交人仓颉，受理人沈括，关注人是否可以加一下此需求的受理人</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button><button class="feedback-image-thumb image-3" type="button" title="预览图片 3" aria-label="预览图片 3" data-preview-image="assets/feedback-preview-3.png"></button></span></td>
-                      <td><span class="feedback-user"><span class="user-avatar avatar-liu">刘</span>刘万龙</span></td>
+                      <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-23 16:40</td>
                       <td><span class="feedback-status processing">处理中</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-23 17:02</td>
                       <td><span class="feedback-id">FB20260923164018093428</span></td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026090986328</a><button class="copy-id-btn" type="button" data-copy-value="R2026090986328" aria-label="复制行云编号 R2026090986328"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a><a class="rebind" href="#rebind">换绑需求</a></span></td>
+                      <td>AI效能</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026090983660">
-                      <td>功能建议</td>
                       <td>JoyWorker</td>
+                      <td>功能建议</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工关联应用，自动生成应用清单，具体建议查看详情</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-tian">田</span>田蓬伟</span></td>
@@ -2534,12 +2491,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-24 10:46</td>
                       <td><span class="feedback-id">FB20260924103959104555</span></td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026090983660</a><button class="copy-id-btn" type="button" data-copy-value="R2026090983660" aria-label="复制行云编号 R2026090983660"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a><a class="rebind" href="#rebind">换绑需求</a></span></td>
+                      <td>JoyAI产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>体验提升</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">代码提交的节点优化</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button><button class="feedback-image-thumb image-3" type="button" title="预览图片 3" aria-label="预览图片 3" data-preview-image="assets/feedback-preview-3.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-qin">秦</span>秦继芳</span></td>
@@ -2548,12 +2505,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-zhu">朱</span>朱欣鑫</span></td>
                       <td>2026-09-23 18:36</td>
                       <td><span class="feedback-id">FB20260923181800096201</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>AI效能</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026091888052">
-                      <td>功能建议</td>
                       <td>JoyWorker</td>
+                      <td>功能建议</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">仓颉为了跑测试会安装插件maven-surefire-plugin，但是我项目里已经有了。</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yang">杨</span>杨杰</span></td>
@@ -2562,12 +2519,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-23 15:46</td>
                       <td><span class="feedback-id">FB20260923152755091277</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026090983660">
-                      <td>新增功能</td>
                       <td>JoyWorker</td>
+                      <td>新增功能</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">希望新增系统运维岗位专家，主要职责见详情描述</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-long">龙</span>龙奥</span></td>
@@ -2576,40 +2533,40 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-li">李</span>李铁</span></td>
                       <td>2026-09-24 10:32</td>
                       <td><span class="feedback-id">FB20260924101012102414</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>JoyAI产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026091672543">
-                      <td>体验提升</td>
                       <td>JoyWorker</td>
+                      <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">测试提给森泉</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
-                      <td><span class="feedback-user"><span class="user-avatar avatar-wang">王</span>王民利</span></td>
+                      <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-23 17:52</td>
                       <td><span class="feedback-status done">已处理</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-23 18:05</td>
                       <td><span class="feedback-id">FB20260923175243095136</span></td>
-                      <td><span class="demand-code"><a class="demand-id-link" href="#detail">R2026091672543</a><button class="copy-id-btn" type="button" data-copy-value="R2026091672543" aria-label="复制行云编号 R2026091672543"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="7" width="11" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/></svg></button></span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>AI效能</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>Bug修复</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>Bug修复</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">同一群多个数字员工协作时上下文与任务状态串线</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
-                      <td><span class="feedback-user"><span class="user-avatar avatar-wan">万</span>万霖</span></td>
+                      <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-23 18:56</td>
                       <td><span class="feedback-status rejected">已驳回</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yu">于</span>于坤</span></td>
                       <td>2026-09-23 19:12</td>
                       <td><span class="feedback-id">FB20260923185602098657</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>AI效能</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026090983660">
-                      <td>Bug修复</td>
                       <td>JoyWorker</td>
+                      <td>Bug修复</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">joyworker交付详情里没有新拉群聊的项目</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-zhu">朱</span>朱欣鑫</span></td>
@@ -2618,12 +2575,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-23 14:26</td>
                       <td><span class="feedback-id">FB20260923140837090452</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>JoyAI产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>体验提升</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工列表页增加按员工ID精准检索能力</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-feng">冯</span>冯汉禹</span></td>
@@ -2632,12 +2589,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-22 14:02</td>
                       <td><span class="feedback-id">FB20260922111845063824</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>功能建议</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>功能建议</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">希望在管理菜单中直接展示数字员工编号</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-lian">连</span>连泽茵</span></td>
@@ -2646,12 +2603,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-22 13:44</td>
                       <td><span class="feedback-id">FB20260922103616062188</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>JoyAI产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026081582825">
-                      <td>新增功能</td>
                       <td>JoyWorker</td>
+                      <td>新增功能</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工工厂支持ID、名称组合查询</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-deng">邓</span>邓国振</span></td>
@@ -2660,12 +2617,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-basic">基</span>基础保障</span></td>
                       <td>2026-09-21 18:00</td>
                       <td><span class="feedback-id">FB20260921172552057903</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>支付基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>Bug修复</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>Bug修复</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">菜单列表搜索数字员工ID后结果为空</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-liyi">李</span>李意文</span></td>
@@ -2674,12 +2631,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-21 16:08</td>
                       <td><span class="feedback-id">FB20260921151231055217</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>支付基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026081582825">
-                      <td>体验提升</td>
                       <td>JoyWorker</td>
+                      <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工ID检索希望支持复制后自动去空格</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-qiao">乔</span>乔飞</span></td>
@@ -2688,12 +2645,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-21 09:30</td>
                       <td><span class="feedback-id">FB20260920194822048631</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                     <tr data-demand-id="R2026081582825">
-                      <td>功能建议</td>
                       <td>JoyWorker</td>
+                      <td>功能建议</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">列表页检索条件增加数字员工ID字段</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-test">测</span>测试同学</span></td>
@@ -2702,12 +2659,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-20 16:02</td>
                       <td><span class="feedback-id">FB20260920142159046208</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>AI效能</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>体验提升</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工管理菜单列表页查询按钮响应较慢</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yu">于</span>于坤</span></td>
@@ -2716,12 +2673,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-19 19:11</td>
                       <td><span class="feedback-id">FB20260919183645041036</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a><a class="assign" href="#assign">指派</a></span></td>
+                      <td>技术保障部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>功能建议</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>功能建议</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">希望列表页支持按数字员工负责人筛选</a></td>
                       <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片" aria-label="预览图片" data-preview-image="assets/feedback-preview.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-wan">万</span>万霖</span></td>
@@ -2730,12 +2687,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-19 17:25</td>
                       <td><span class="feedback-id">FB20260919161045057631</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>新增功能</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>新增功能</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工列表导出时增加员工ID列</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-zhu">朱</span>朱欣鑫</span></td>
@@ -2744,12 +2701,12 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-shen">沈</span>沈括</span></td>
                       <td>2026-09-18 14:18</td>
                       <td><span class="feedback-id">FB20260918113205050986</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>JoyAI产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
-                    <tr>
-                      <td>功能建议</td>
+                    <tr data-demand-id="R2026081582825">
                       <td>JoyWorker</td>
+                      <td>功能建议</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工工厂列表页筛选条件支持按业务线联动</a></td>
                       <td class="image-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-yang">杨</span>杨杰</span></td>
@@ -2758,8 +2715,8 @@
                       <td><span class="feedback-user"><span class="user-avatar avatar-yu">于</span>于坤</span></td>
                       <td>2026-09-18 10:15</td>
                       <td><span class="feedback-id">FB20260918092636049872</span></td>
-                      <td><span class="feedback-image-empty">-</span></td>
-                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">详情</a></span></td>
+                      <td>基础产品部</td>
+                      <td class="action-cell"><span class="row-actions"><a class="view" href="#view">查看</a></span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -2826,7 +2783,10 @@
         </section>
 
         <section class="drawer-card">
-          <h3 class="drawer-section-title">描述说明：</h3>
+          <div class="drawer-section-head">
+            <h3 class="drawer-section-title">描述说明：</h3>
+            <button class="detail-edit-btn" type="button" data-detail-description-edit hidden>编辑</button>
+          </div>
           <div class="detail-content-box" data-detail-field="description">
             <p>问题现象：用户在当前功能流程中遇到体验或效率问题，需要进一步确认复现路径与影响范围。</p>
             <p>期望效果：优化对应功能表现，让操作结果更明确、反馈更稳定。</p>
@@ -2870,11 +2830,12 @@
           <input class="modal-input" id="feedback-assignee" type="search" placeholder="请输入ERP/姓名搜索" />
         </div>
         <label class="modal-field" data-feedback-type-field>
-          <span class="modal-label">反馈类型<span class="required" data-feedback-type-required>*</span></span>
+          <span class="modal-label">意见类型<span class="required" data-feedback-type-required>*</span></span>
           <select class="modal-select" id="feedback-type" required>
-            <option value="" selected disabled hidden>请选择反馈类型</option>
-            <option>咨询诉求</option>
-            <option>产品优化需求</option>
+            <option value="" selected disabled hidden>请选择意见类型</option>
+            <option>非需求</option>
+            <option>产品需求</option>
+            <option>研发需求</option>
           </select>
         </label>
         <div class="modal-field" data-relation-section hidden>
@@ -2902,18 +2863,11 @@
               <textarea class="modal-textarea" id="demand-description" placeholder="请对您的需求做一个大致且详细的描述，在「什么场景」达到「什么样的效果」，这样的组合有利于我们更快的理解并实现您的需求。"></textarea>
             </label>
             <label class="modal-field">
-              <span class="modal-label">计划迭代版本号<span class="required">*</span></span>
-              <span class="version-select">
-                <select class="modal-select" id="demand-type">
-                  <option selected>V 1.4.5（2026-10-08上线）</option>
-                  <option>V 1.4.6（2026-10-15上线）</option>
-                  <option>V 1.4.7（2026-10-22上线）</option>
-                  <option>V 1.4.8（2026-10-29上线）</option>
-                </select>
-                <span class="version-select-value" data-version-select-value aria-hidden="true">
-                  <span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span>
-                </span>
-              </span>
+              <span class="modal-label">需求类型<span class="required">*</span></span>
+              <select class="modal-select" id="demand-type">
+                <option selected>产品需求</option>
+                <option>研发需求</option>
+              </select>
             </label>
             <div class="modal-field">
               <span class="modal-label">优先级<span class="required">*</span></span>
@@ -2939,7 +2893,7 @@
               </div>
               <div class="person-block">
                 <div class="person-head">关注人 <a class="transfer-link" href="#add-follower" data-person-trigger="follower">添加</a></div>
-                <div class="person-value" id="demand-follower"></div>
+                <div class="person-value" id="demand-follower"><span class="person-avatar avatar-ma">马</span><span>马莹莹</span></div>
               </div>
             </div>
           </div>
@@ -3123,6 +3077,86 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="delete-confirm-modal" aria-hidden="true">
+    <section class="delete-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-title">
+      <header class="modal-header">
+        <h2 class="modal-title" id="delete-confirm-title">删除反馈</h2>
+        <button class="modal-close" type="button" data-delete-modal-close aria-label="关闭">×</button>
+      </header>
+      <div class="modal-body">
+        <p class="delete-confirm-text">确认是否删除该反馈？删除后将从当前列表移除。</p>
+      </div>
+      <footer class="modal-footer">
+        <button class="modal-btn" type="button" data-delete-modal-close>取消</button>
+        <button class="modal-btn danger" type="button" data-delete-modal-confirm>确认删除</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="new-feedback-modal" aria-hidden="true">
+    <section class="new-feedback-modal" role="dialog" aria-modal="true" aria-labelledby="new-feedback-title">
+      <header class="modal-header">
+        <h2 class="modal-title" id="new-feedback-title">新建反馈</h2>
+        <button class="modal-close" type="button" data-new-feedback-close aria-label="关闭">×</button>
+      </header>
+      <form id="new-feedback-form">
+        <div class="modal-body">
+          <div class="new-feedback-grid">
+            <label class="modal-field">
+              <span class="modal-label">所属平台<span class="required">*</span></span>
+              <select class="modal-select" id="new-feedback-platform" required>
+                <option value="" disabled hidden>请选择所属平台</option>
+                <option selected>JoyWorker</option>
+                <option>技能市场</option>
+                <option>规约管理</option>
+                <option>LikeCode</option>
+              </select>
+            </label>
+            <label class="modal-field">
+              <span class="modal-label">意见类型<span class="required">*</span></span>
+              <select class="modal-select" id="new-feedback-type" required>
+                <option value="" selected disabled hidden>请选择意见类型</option>
+                <option>Bug修复</option>
+                <option>体验提升</option>
+                <option>新增功能</option>
+                <option>功能建议</option>
+                <option>性能问题</option>
+                <option>其他</option>
+              </select>
+            </label>
+            <label class="modal-field wide">
+              <span class="modal-label">反馈标题<span class="required">*</span></span>
+              <input class="modal-input" id="new-feedback-title-input" type="text" placeholder="请输入反馈标题" required />
+            </label>
+            <div class="modal-field wide">
+              <span class="modal-label">详情描述</span>
+              <div class="rich-editor" aria-label="详情描述">
+                <div class="rich-toolbar" aria-label="编辑工具栏">
+                  <button class="rich-tool-btn bold" type="button" data-rich-command="bold" aria-label="加粗">B</button>
+                  <button class="rich-tool-btn italic" type="button" data-rich-command="italic" aria-label="斜体">I</button>
+                  <button class="rich-tool-btn underline" type="button" data-rich-command="underline" aria-label="下划线">U</button>
+                  <button class="rich-tool-btn" type="button" data-rich-command="insertOrderedList" aria-label="编号列表">1.</button>
+                  <button class="rich-tool-btn" type="button" data-rich-command="insertUnorderedList" aria-label="无序列表">•</button>
+                  <button class="rich-tool-btn" type="button" data-rich-image-trigger aria-label="插入图片">图</button>
+                  <input class="rich-image-input" id="new-feedback-rich-image" type="file" accept="image/*" />
+                </div>
+                <div class="rich-editor-input" id="new-feedback-description" contenteditable="true" data-placeholder="请输入详情描述，支持加粗、列表与图片"></div>
+              </div>
+            </div>
+            <label class="modal-field wide">
+              <span class="modal-label">京Me群号</span>
+              <input class="modal-input" id="new-feedback-jingme" type="text" placeholder="请输入京Me群号" />
+            </label>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <button class="modal-btn" type="button" data-new-feedback-close>取消</button>
+          <button class="modal-btn primary" type="submit">提交</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
   <div class="person-popover" id="person-popover" aria-hidden="true">
     <div class="person-search">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3133,21 +3167,21 @@
     </div>
     <div class="selected-count">已选 0 人</div>
     <div class="person-list">
-      <button class="person-option" type="button" data-avatar="avatar-cao" data-initial="曹" data-name="曹森泉" data-keywords="曹森泉 caosenquan cao caosen 金融科技事业群 金融科技研发部 AI效能">
-        <span class="person-avatar avatar-cao">曹</span>
-        <span class="person-info"><strong>曹森泉 (caosenquan)</strong><span>金融科技事业群-金融科技研发部-AI效能</span></span>
-      </button>
-      <button class="person-option" type="button" data-avatar="avatar-basic" data-initial="曹" data-name="曹森" data-keywords="曹森 caosen1 cao caosen 逆向运营部 沈阳逆向综合仓1号库 沈阳逆向运营中心">
-        <span class="person-avatar avatar-basic">曹</span>
-        <span class="person-info"><strong>曹森 (caosen1)</strong><span>逆向运营部-沈阳逆向综合仓1号库-沈阳逆向运营中心</span></span>
-      </button>
-      <button class="person-option" type="button" data-avatar="avatar-qin" data-initial="曹" data-name="曹森" data-keywords="曹森 yxcaosen cao caosen 家电家居服务部 家电家居POP服务部 家电家居运营中心">
-        <span class="person-avatar avatar-qin">曹</span>
-        <span class="person-info"><strong>曹森 (yxcaosen)</strong><span>家电家居服务部-家电家居POP服务部-家电家居运营中心</span></span>
-      </button>
-      <button class="person-option" type="button" data-avatar="avatar-shen" data-initial="曹" data-name="曹森" data-keywords="曹森 caosen.11 cao caosen 河南省区 B2B运营部 河南到仓操作中心">
+      <button class="person-option" type="button" data-avatar="avatar-shen" data-initial="曹" data-name="曹森" data-value="caosen.11(曹森)" data-keywords="曹森 caosen.11 cao caosen 京东集团 京东物流 运营部 河南省区 B2B运营部 河南到仓操作中心">
         <span class="person-avatar avatar-shen">曹</span>
-        <span class="person-info"><strong>曹森 (caosen.11)</strong><span>河南省区-B2B运营部-河南到仓操作中心</span></span>
+        <span class="person-info"><strong>caosen.11(曹森)</strong><span>京东集团-京东物流-运营部-河南省区-B2B运营部-河南到仓操作中心</span></span>
+      </button>
+      <button class="person-option" type="button" data-avatar="avatar-basic" data-initial="曹" data-name="曹森" data-value="caosen1(曹森)" data-keywords="曹森 caosen1 cao caosen 京东集团 京东物流 运营部 辽宁省区 逆向运营部 沈阳逆向综合仓1号库 沈阳逆向入库组">
+        <span class="person-avatar avatar-basic">曹</span>
+        <span class="person-info"><strong>caosen1(曹森)</strong><span>京东集团-京东物流-运营部-辽宁省区-逆向运营部-沈阳逆向综合仓1号库-沈阳逆向入库组</span></span>
+      </button>
+      <button class="person-option" type="button" data-avatar="avatar-qin" data-initial="曹" data-name="曹森华" data-value="caosenhua1(曹森华)" data-keywords="曹森华 caosenhua1 cao caosen 京东集团 京东物流 运营部 湖南省区 快递业务部 株郴片区 郴州资兴站">
+        <span class="person-avatar avatar-qin">曹</span>
+        <span class="person-info"><strong>caosenhua1(曹森华)</strong><span>京东集团-京东物流-运营部-湖南省区-快递业务部-株郴片区-郴州资兴站</span></span>
+      </button>
+      <button class="person-option" type="button" data-avatar="avatar-cao" data-initial="曹" data-name="曹森泉" data-value="caosenquan(曹森泉)" data-keywords="曹森泉 caosenquan cao caosen 京东集团 京东科技 金融科技事业群 金融科技研发部 AI效能部">
+        <span class="person-avatar avatar-cao">曹</span>
+        <span class="person-info"><strong>caosenquan(曹森泉)</strong><span>京东集团-京东科技-金融科技事业群-金融科技研发部-AI效能部</span></span>
       </button>
       <button class="person-option" type="button" data-avatar="avatar-feng" data-initial="冯" data-name="冯汉禹" data-keywords="冯汉禹 fenghanyu feng">
         <span class="person-avatar avatar-feng">冯</span>
@@ -3182,6 +3216,7 @@
     </svg>
   </div>
 
+
   <script>
     const tabButtons = document.querySelectorAll('.tab-btn');
     const panels = document.querySelectorAll('.panel-view');
@@ -3206,9 +3241,11 @@
     const initialFeedbackRows = Array.from(feedbackRows);
     const relationInput = document.querySelector('[data-relation-input]');
     const relationClearButton = document.querySelector('[data-clear-relation-filter]');
-    const createDemandButton = document.querySelector('[data-create-demand]');
     const filterToggleButtons = document.querySelectorAll('[data-filter-toggle]');
-    const filterClearInputs = document.querySelectorAll('.panel-view .feedback-filter .filter-input, .panel-view .feedback-filter .date-range-input');
+    const feedbackUserInput = document.querySelector('[data-feedback-user-input]');
+    const departmentInput = document.querySelector('[data-department-input]');
+    const departmentSuggestPopover = document.querySelector('#department-suggest-popover');
+    const filterClearInputs = document.querySelectorAll('#feedback-panel .feedback-filter .filter-input, #feedback-panel .feedback-filter .date-range-input');
     const paginationTotal = document.querySelector('[data-pagination-total]');
     const paginationPages = document.querySelector('[data-pagination-pages]');
     const paginationPrev = document.querySelector('[data-pagination-prev]');
@@ -3221,8 +3258,14 @@
     const detailAssignButton = document.querySelector('[data-detail-assign]');
     const detailClaimButton = document.querySelector('[data-detail-claim]');
     const detailProcessingFeedback = document.querySelector('[data-detail-processing-feedback]');
+    const detailDescriptionEditButton = document.querySelector('[data-detail-description-edit]');
     const rebindModal = document.querySelector('#rebind-modal');
     const rejectModal = document.querySelector('#reject-modal');
+    const deleteConfirmModal = document.querySelector('#delete-confirm-modal');
+    const newFeedbackModal = document.querySelector('#new-feedback-modal');
+    const newFeedbackForm = document.querySelector('#new-feedback-form');
+    const newFeedbackDescription = document.querySelector('#new-feedback-description');
+    const newFeedbackRichImageInput = document.querySelector('#new-feedback-rich-image');
     const rejectOpinion = document.querySelector('#reject-opinion');
     const rejectNotify = document.querySelector('#reject-jingme-notify');
     const assignmentField = document.querySelector('[data-assignment-field]');
@@ -3237,7 +3280,6 @@
     const relationSection = document.querySelector('[data-relation-section]');
     const relationRequired = document.querySelector('[data-relation-required]');
     const demandTypeSelect = document.querySelector('#demand-type');
-    const versionSelectValue = document.querySelector('[data-version-select-value]');
     const demandName = document.querySelector('#demand-name');
     const demandDescription = document.querySelector('#demand-description');
     const demandOwner = document.querySelector('#demand-owner');
@@ -3259,11 +3301,19 @@
     let activePersonTarget = null;
     let activeFeedbackDemandId = '';
     let activeDetailRow = null;
+    let activeDetailTitle = '';
+    let activeDeleteRow = null;
     let currentFeedbackMode = 'claim';
+    const editedFeedbackDescriptions = {};
     let feedbackCurrentPage = 1;
     let imagePreviewScale = 1;
     let imagePreviewRotation = 0;
-    let selectedFollowers = [];
+    let selectedFollowers = [{ avatar: 'avatar-ma', initial: '马', name: '马莹莹' }];
+    const departmentOptions = [
+      '京东集团-京东科技-金融科技事业群-金融科技研发部-AI效能部',
+      '京东集团-京东科技-风险管理中心-风险产品与研发部-AI效能部',
+      '京东集团-京东科技-保险业务部-保险研发部-AI效能部'
+    ];
 
     function syncFilterClearButton(input) {
       if (!input) return;
@@ -3306,6 +3356,136 @@
     }
 
     filterClearInputs.forEach(setupFilterClearInput);
+
+    function getDepartmentMatches(keyword = '') {
+      const value = keyword.trim().toLowerCase();
+      if (!value) return [];
+      return departmentOptions.filter((department) => department.toLowerCase().includes(value));
+    }
+
+    function positionDepartmentSuggestPopover() {
+      if (!departmentInput || !departmentSuggestPopover) return;
+      const rect = departmentInput.getBoundingClientRect();
+      const gap = 6;
+      const margin = 16;
+      const measure = document.createElement('span');
+      const optionStyle = getComputedStyle(departmentSuggestPopover.querySelector('.department-option') || departmentInput);
+      measure.style.position = 'fixed';
+      measure.style.left = '-9999px';
+      measure.style.top = '-9999px';
+      measure.style.visibility = 'hidden';
+      measure.style.whiteSpace = 'nowrap';
+      measure.style.font = optionStyle.font;
+      document.body.appendChild(measure);
+      const contentWidth = Array.from(departmentSuggestPopover.querySelectorAll('.department-option')).reduce((maxWidth, option) => {
+        measure.textContent = option.textContent.trim();
+        return Math.max(maxWidth, measure.getBoundingClientRect().width);
+      }, 0);
+      measure.remove();
+      const width = Math.max(rect.width, Math.ceil(contentWidth + 30));
+      const left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin));
+      const top = Math.min(rect.bottom + gap, window.innerHeight - 120);
+      departmentSuggestPopover.style.left = `${left}px`;
+      departmentSuggestPopover.style.top = `${Math.max(margin, top)}px`;
+      departmentSuggestPopover.style.width = `${width}px`;
+    }
+
+    function measureDepartmentText(text) {
+      if (!departmentInput) return 0;
+      const measure = document.createElement('span');
+      measure.style.position = 'fixed';
+      measure.style.left = '-9999px';
+      measure.style.top = '-9999px';
+      measure.style.visibility = 'hidden';
+      measure.style.whiteSpace = 'nowrap';
+      measure.style.font = getComputedStyle(departmentInput).font;
+      measure.textContent = text;
+      document.body.appendChild(measure);
+      const width = measure.getBoundingClientRect().width;
+      measure.remove();
+      return width;
+    }
+
+    function getDepartmentDisplayValue(department) {
+      if (!departmentInput) return department;
+      const inputStyle = getComputedStyle(departmentInput);
+      const endGapWidth = measureDepartmentText('空空');
+      const availableWidth = departmentInput.clientWidth
+        - Number.parseFloat(inputStyle.paddingLeft || 0)
+        - Number.parseFloat(inputStyle.paddingRight || 0)
+        - endGapWidth;
+      if (measureDepartmentText(department) <= availableWidth) return department;
+      let left = 0;
+      let right = department.length;
+      let result = department;
+      while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        const candidate = `...${department.slice(department.length - mid)}`;
+        if (measureDepartmentText(candidate) <= availableWidth) {
+          result = candidate;
+          left = mid + 1;
+        } else {
+          right = mid - 1;
+        }
+      }
+      return result;
+    }
+
+    function refreshDepartmentDisplayValue() {
+      if (!departmentInput?.dataset.fullValue) return;
+      departmentInput.value = getDepartmentDisplayValue(departmentInput.dataset.fullValue);
+      syncFilterClearButton(departmentInput);
+    }
+
+    function closeDepartmentSuggestPopover() {
+      departmentSuggestPopover?.classList.remove('is-open');
+      departmentSuggestPopover?.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderDepartmentSuggestPopover() {
+      if (!departmentInput || !departmentSuggestPopover) return;
+      const matches = getDepartmentMatches(departmentInput.value);
+      if (!matches.length) {
+        closeDepartmentSuggestPopover();
+        return;
+      }
+      departmentSuggestPopover.innerHTML = matches.map((department) => (
+        `<button class="department-option" type="button" data-department-option="${escapeHtml(department)}">${escapeHtml(department)}</button>`
+      )).join('');
+      positionDepartmentSuggestPopover();
+      departmentSuggestPopover.classList.add('is-open');
+      departmentSuggestPopover.setAttribute('aria-hidden', 'false');
+    }
+
+    function selectDepartmentOption(department) {
+      if (!departmentInput) return;
+      departmentInput.dataset.fullValue = department;
+      departmentInput.value = getDepartmentDisplayValue(department);
+      departmentInput.dispatchEvent(new Event('change', { bubbles: true }));
+      syncFilterClearButton(departmentInput);
+      closeDepartmentSuggestPopover();
+      departmentInput.focus();
+    }
+
+    departmentInput?.addEventListener('input', () => {
+      delete departmentInput.dataset.fullValue;
+      renderDepartmentSuggestPopover();
+    });
+    departmentInput?.addEventListener('focus', renderDepartmentSuggestPopover);
+    departmentInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeDepartmentSuggestPopover();
+      if (event.key === 'Enter') {
+        closeDepartmentSuggestPopover();
+      }
+    });
+    departmentSuggestPopover?.addEventListener('mousedown', (event) => {
+      event.preventDefault();
+    });
+    departmentSuggestPopover?.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-department-option]');
+      if (!option) return;
+      selectDepartmentOption(option.dataset.departmentOption || option.textContent.trim());
+    });
 
     function buildDetailImages(imageName = '问题截图.png') {
       return `
@@ -3493,28 +3673,9 @@
       updateFeedbackPagination();
     }
 
-    function syncFilterCollapseState(button) {
-      const filterPanel = button.closest('.feedback-filter');
-      const expanded = button.getAttribute('aria-expanded') === 'true';
-      const filterToggleText = button.querySelector('[data-filter-toggle-text]');
-      filterPanel?.querySelectorAll('.filter-grid > .filter-item').forEach((item) => { item.hidden = false; });
-      filterPanel?.classList.toggle('is-collapsed', !expanded);
-      button.classList.toggle('is-expanded', expanded);
-      if (filterToggleText) filterToggleText.textContent = expanded ? '收起筛选' : '展开筛选';
-    }
-
-    filterToggleButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const expanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', String(!expanded));
-        syncFilterCollapseState(button);
-      });
-      requestAnimationFrame(() => syncFilterCollapseState(button));
-    });
-
     function updateFeedbackPagination() {
       const pageSize = Number.parseInt(pageSizeSelect?.value, 10) || 10;
-      const allRows = Array.from(feedbackRows);
+      const allRows = Array.from(feedbackTbody?.querySelectorAll('tr') || feedbackRows);
       const visibleRows = activeFeedbackDemandId
         ? allRows.filter((row) => row.dataset.demandId === activeFeedbackDemandId)
         : allRows;
@@ -3523,7 +3684,7 @@
       feedbackCurrentPage = Math.min(Math.max(1, feedbackCurrentPage), pageCount);
       const start = (feedbackCurrentPage - 1) * pageSize;
       const end = start + pageSize;
-      feedbackRows.forEach((row) => {
+      allRows.forEach((row) => {
         row.classList.toggle('feedback-row-hidden', !visibleRows.includes(row));
         row.classList.remove('feedback-row-page-hidden');
       });
@@ -3549,7 +3710,24 @@
 
     relationClearButton?.addEventListener('click', resetFeedbackInitialState);
 
-    createDemandButton?.addEventListener('click', openCreateDemandModal);
+    function syncFilterCollapseState(button) {
+      const filterPanel = button.closest('.feedback-filter');
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      const filterToggleText = button.querySelector('[data-filter-toggle-text]');
+      filterPanel?.querySelectorAll('.filter-grid > .filter-item').forEach((item) => { item.hidden = false; });
+      filterPanel?.classList.toggle('is-collapsed', !expanded);
+      button.classList.toggle('is-expanded', expanded);
+      if (filterToggleText) filterToggleText.textContent = expanded ? '收起筛选' : '展开筛选';
+    }
+
+    filterToggleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        syncFilterCollapseState(button);
+      });
+      requestAnimationFrame(() => syncFilterCollapseState(button));
+    });
 
     relationInput?.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter') return;
@@ -3729,18 +3907,6 @@
     function updateFeedbackTypeView() {
       const type = feedbackTypeSelect?.value || '';
       feedbackTypeSelect?.classList.toggle('is-placeholder', !type);
-      if (currentFeedbackMode === 'newDemand') {
-        if (relationSection) relationSection.hidden = true;
-        if (relationRequired) relationRequired.hidden = true;
-        if (nonDemandPanel) nonDemandPanel.hidden = true;
-        if (claimNotify) claimNotify.hidden = true;
-        if (demandTypeSelect) {
-          demandTypeSelect.value = 'V 1.4.5（2026-10-08上线）';
-          updateVersionSelectValue();
-        }
-        setRelationMode('create');
-        return;
-      }
       if (currentFeedbackMode === 'assignOnly') {
         if (relationSection) relationSection.hidden = true;
         if (relationRequired) relationRequired.hidden = true;
@@ -3749,43 +3915,19 @@
         setRelationMode('');
         return;
       }
-      const requiresDemand = type === '产品优化需求';
-      const isNonDemand = type === '咨询诉求';
+      const requiresDemand = type === '产品需求' || type === '研发需求';
+      const isNonDemand = type === '非需求';
       if (relationSection) relationSection.hidden = !requiresDemand;
       if (relationRequired) relationRequired.hidden = !requiresDemand;
       if (nonDemandPanel) nonDemandPanel.hidden = !isNonDemand;
       if (claimNotify) claimNotify.hidden = !isNonDemand;
-      if (demandTypeSelect && requiresDemand) {
-        demandTypeSelect.value = 'V 1.4.5（2026-10-08上线）';
-        updateVersionSelectValue();
-      }
+      if (demandTypeSelect && requiresDemand) demandTypeSelect.value = type;
       if (!requiresDemand) {
         setRelationMode('');
         return;
       }
       const activeRelation = [...relationCards].find((card) => card.classList.contains('active'))?.dataset.relation;
       setRelationMode(activeRelation || 'create');
-    }
-
-    function updateVersionSelectValue() {
-      if (!demandTypeSelect || !versionSelectValue) return;
-      const value = demandTypeSelect.value || '';
-      const match = value.match(/^(V\s+[\d.]+)(.*)$/);
-      const version = match ? match[1] : value;
-      const date = match ? match[2] : '';
-      versionSelectValue.innerHTML = `<span class="version-select-name">${escapeHtml(version)}</span><span class="version-select-date">${escapeHtml(date)}</span>`;
-    }
-
-    function resetDemandPriority() {
-      priorityOptions.forEach((option) => {
-        const active = option.dataset.priority === 'P2';
-        option.classList.toggle('active', active);
-        option.setAttribute('aria-selected', String(active));
-      });
-      if (priorityText) priorityText.textContent = 'P2';
-      if (priorityValue) priorityValue.value = 'P2';
-      const triggerIcon = priorityTrigger?.querySelector('.priority-icon');
-      if (triggerIcon) triggerIcon.className = 'priority-icon priority-p2';
     }
 
     function prepareFeedbackModal(row, mode) {
@@ -3795,15 +3937,13 @@
       const userAvatar = userElement?.querySelector('.user-avatar')?.cloneNode(true);
       const isAssign = mode === 'assign' || mode === 'assignOnly';
       const isAssignOnly = mode === 'assignOnly';
-      const isNewDemand = mode === 'newDemand';
       currentFeedbackMode = mode;
       claimModal?.classList.toggle('is-assign-only', isAssignOnly);
-      claimModal?.classList.toggle('is-new-demand', isNewDemand);
-      if (claimModalTitle) claimModalTitle.textContent = isNewDemand ? '新建需求' : isAssign ? '指派反馈' : '认领反馈';
+      if (claimModalTitle) claimModalTitle.textContent = isAssign ? '指派反馈' : '认领反馈';
       if (assignmentField) assignmentField.hidden = !isAssign;
-      if (feedbackTypeField) feedbackTypeField.hidden = isAssignOnly || isNewDemand;
-      if (feedbackTypeRequired) feedbackTypeRequired.hidden = isAssign || isNewDemand;
-      if (feedbackTypeSelect) feedbackTypeSelect.required = !isAssign && !isNewDemand;
+      if (feedbackTypeField) feedbackTypeField.hidden = isAssignOnly;
+      if (feedbackTypeRequired) feedbackTypeRequired.hidden = isAssign;
+      if (feedbackTypeSelect) feedbackTypeSelect.required = !isAssign;
       if (ownerTransferLink) ownerTransferLink.hidden = isAssign;
       if (isAssign && feedbackAssignee) {
         feedbackAssignee.value = '';
@@ -3813,30 +3953,24 @@
       if (feedbackClaimStatus) feedbackClaimStatus.value = '';
       const claimNotifyInput = claimNotify?.querySelector('input');
       if (claimNotifyInput) claimNotifyInput.checked = false;
-      resetDemandPriority();
       updateFeedbackTypeView();
       if (isAssign) {
         renderDemandOwnerText('');
       } else if (demandOwner) {
         renderPerson(demandOwner, { avatar: 'avatar-cao', initial: '曹', name: '曹森泉' });
       }
-      if (demandName) demandName.value = isNewDemand ? '' : title;
+      if (demandName) demandName.value = title;
       if (demandDescription) demandDescription.value = '';
       const follower = document.querySelector('#demand-follower');
       if (follower) {
-        if (isNewDemand) {
-          selectedFollowers = [];
-          renderFollowers();
-        } else {
-          follower.innerHTML = '';
-          if (userAvatar) {
-            userAvatar.classList.add('person-avatar');
-            follower.appendChild(userAvatar);
-          }
-          const name = document.createElement('span');
-          name.textContent = user;
-          follower.appendChild(name);
+        follower.innerHTML = '';
+        if (userAvatar) {
+          userAvatar.classList.add('person-avatar');
+          follower.appendChild(userAvatar);
         }
+        const name = document.createElement('span');
+        name.textContent = user;
+        follower.appendChild(name);
       }
     }
 
@@ -3855,10 +3989,6 @@
     function openAssignModal(row) {
       const statusText = row?.querySelector('.feedback-status')?.textContent?.trim();
       openFeedbackModal(row, statusText === '处理中' ? 'assignOnly' : 'assign');
-    }
-
-    function openCreateDemandModal() {
-      openFeedbackModal(null, 'newDemand');
     }
 
     function setDetailField(name, value) {
@@ -3880,6 +4010,56 @@
 
     function escapeHtml(value = '') {
       return value.replace(/[&<>"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+    }
+
+    function descriptionTextToHtml(value = '') {
+      return value
+        .split(/\n+/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => `<p>${escapeHtml(line)}</p>`)
+        .join('') || '<p>-</p>';
+    }
+
+    function getDescriptionText(description) {
+      const paragraphs = Array.from(description?.querySelectorAll('p') || []);
+      if (paragraphs.length) return paragraphs.map((item) => item.textContent.trim()).filter(Boolean).join('\n');
+      return description?.textContent.trim() || '';
+    }
+
+    function openDescriptionEditor() {
+      const description = detailDrawer?.querySelector('[data-detail-field="description"]');
+      if (!description || !detailDescriptionEditButton) return;
+      const sourceText = getDescriptionText(description);
+      description.dataset.viewHtml = description.innerHTML;
+      description.innerHTML = `
+        <div class="detail-edit-wrap">
+          <textarea class="detail-edit-textarea" data-detail-description-input>${escapeHtml(sourceText)}</textarea>
+          <div class="detail-edit-actions">
+            <button class="modal-btn" type="button" data-detail-description-cancel>取消</button>
+            <button class="modal-btn primary" type="button" data-detail-description-save>保存</button>
+          </div>
+        </div>
+      `;
+      detailDescriptionEditButton.hidden = true;
+      requestAnimationFrame(() => description.querySelector('[data-detail-description-input]')?.focus());
+    }
+
+    function closeDescriptionEditor() {
+      const description = detailDrawer?.querySelector('[data-detail-field="description"]');
+      if (!description || !detailDescriptionEditButton) return;
+      description.innerHTML = description.dataset.viewHtml || description.innerHTML;
+      detailDescriptionEditButton.hidden = false;
+    }
+
+    function saveDescriptionEditor() {
+      const description = detailDrawer?.querySelector('[data-detail-field="description"]');
+      const input = description?.querySelector('[data-detail-description-input]');
+      if (!description || !input || !detailDescriptionEditButton) return;
+      const nextHtml = descriptionTextToHtml(input.value);
+      editedFeedbackDescriptions[activeDetailTitle] = nextHtml;
+      description.innerHTML = nextHtml;
+      detailDescriptionEditButton.hidden = false;
     }
 
     function buildTimelinePersonHtml(personNode, fallbackName = '系统') {
@@ -3908,8 +4088,8 @@
     function openDetailDrawer(row) {
       if (!detailDrawer || !row) return;
       const cells = row.querySelectorAll('td');
-      const type = cells[0]?.textContent.trim() || '-';
-      const platform = cells[1]?.textContent.trim() || '-';
+      const platform = cells[0]?.textContent.trim() || '-';
+      const type = cells[1]?.textContent.trim() || '-';
       const title = cells[2]?.textContent.trim() || '-';
       const time = cells[5]?.textContent.trim() || '-';
       const statusText = cells[6]?.textContent.trim() || '-';
@@ -3918,9 +4098,11 @@
       const id = cells[9]?.textContent.trim() || '-';
       const statusNode = cloneCellContent(cells[6], '-');
       const userNode = cloneCellContent(cells[4], '-');
+      const feedbackUserText = cells[4]?.textContent.replace(/\s+/g, '') || '';
       const handlerNode = cloneCellContent(cells[7], '-');
       const processorNode = cloneCellContent(cells[7], '-');
       activeDetailRow = row;
+      activeDetailTitle = title;
       setDetailField('title', title);
       setDetailField('id', id);
       setDetailField('user', userNode);
@@ -3930,15 +4112,20 @@
       setDetailField('status', statusNode);
       setDetailField('updateTime', updateTime);
       setDetailField('processor', processorNode);
-      const isPending = statusText === '待处理';
       const hasProcessingFeedback = ['已处理', '已驳回'].includes(statusText);
-      if (detailFooter) detailFooter.hidden = !isPending;
-      if (detailAssignButton) detailAssignButton.hidden = !isPending;
-      if (detailClaimButton) detailClaimButton.hidden = !isPending;
+      const canEditDescription = feedbackUserText.includes('曹森泉') && ['待处理', '待处置'].includes(statusText);
+      if (detailFooter) detailFooter.hidden = true;
+      if (detailAssignButton) detailAssignButton.hidden = true;
+      if (detailClaimButton) detailClaimButton.hidden = true;
+      if (detailDescriptionEditButton) {
+        detailDescriptionEditButton.hidden = !canEditDescription;
+        detailDescriptionEditButton.textContent = '编辑';
+      }
       if (detailProcessingFeedback) detailProcessingFeedback.hidden = !hasProcessingFeedback;
       const description = detailDrawer.querySelector('[data-detail-field="description"]');
       if (description) {
-        description.innerHTML = feedbackDetailDescriptions[title] || `<p>问题现象：${escapeHtml(title)}</p><p>期望效果：请处理人结合反馈内容确认原因，并同步后续处置结论。</p>${buildDetailImages()}`;
+        description.innerHTML = editedFeedbackDescriptions[title] || feedbackDetailDescriptions[title] || `<p>问题现象：${escapeHtml(title)}</p><p>期望效果：请处理人结合反馈内容确认原因，并同步后续处置结论。</p>${buildDetailImages()}`;
+        delete description.dataset.viewHtml;
       }
       buildDetailTimeline({ time, handler: handlerText, updateTime, statusText, userNode: cloneCellContent(cells[4], '-'), handlerNode });
       detailDrawer.classList.add('is-open');
@@ -3949,13 +4136,14 @@
       detailDrawer?.classList.remove('is-open');
       detailDrawer?.setAttribute('aria-hidden', 'true');
       activeDetailRow = null;
+      activeDetailTitle = '';
+      if (detailDescriptionEditButton) detailDescriptionEditButton.hidden = true;
     }
 
     function closeClaimModal() {
       if (!claimModal) return;
       claimModal.classList.remove('is-open');
       claimModal.classList.remove('is-assign-only');
-      claimModal.classList.remove('is-new-demand');
       claimModal.setAttribute('aria-hidden', 'true');
       closePersonPopover();
     }
@@ -3988,20 +4176,76 @@
       rejectModal?.setAttribute('aria-hidden', 'true');
     }
 
+    function openDeleteConfirmModal(row) {
+      activeDeleteRow = row;
+      deleteConfirmModal?.classList.add('is-open');
+      deleteConfirmModal?.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeDeleteConfirmModal() {
+      deleteConfirmModal?.classList.remove('is-open');
+      deleteConfirmModal?.setAttribute('aria-hidden', 'true');
+      activeDeleteRow = null;
+    }
+
+    function confirmDeleteFeedback() {
+      if (!activeDeleteRow) return;
+      const deletedRow = activeDeleteRow;
+      const initialIndex = initialFeedbackRows.indexOf(deletedRow);
+      if (initialIndex > -1) initialFeedbackRows.splice(initialIndex, 1);
+      deletedRow.remove();
+      closeDeleteConfirmModal();
+      updateFeedbackPagination();
+      showCopyToast('删除成功');
+    }
+
+    function openNewFeedbackModal() {
+      newFeedbackForm?.reset();
+      if (newFeedbackDescription) newFeedbackDescription.innerHTML = '';
+      newFeedbackModal?.classList.add('is-open');
+      newFeedbackModal?.setAttribute('aria-hidden', 'false');
+      requestAnimationFrame(() => document.querySelector('#new-feedback-platform')?.focus());
+    }
+
+    function closeNewFeedbackModal() {
+      newFeedbackModal?.classList.remove('is-open');
+      newFeedbackModal?.setAttribute('aria-hidden', 'true');
+    }
+
+    function focusRichEditor() {
+      newFeedbackDescription?.focus();
+    }
+
+    function insertRichEditorImage(file) {
+      if (!file || !file.type.startsWith('image/') || !newFeedbackDescription) return;
+      const image = document.createElement('img');
+      image.src = URL.createObjectURL(file);
+      image.alt = file.name;
+      newFeedbackDescription.appendChild(image);
+      newFeedbackDescription.appendChild(document.createElement('br'));
+      focusRichEditor();
+    }
+
     function positionPersonPopover(trigger) {
       if (!personPopover || !trigger) return;
       const rect = trigger.getBoundingClientRect();
       const gap = 8;
       const margin = 16;
+      const isFeedbackUserSuggest = activePersonTarget === 'feedbackUser' && trigger === feedbackUserInput;
+      const isInputSuggest = isFeedbackUserSuggest || (activePersonTarget === 'feedbackAssignee' && trigger === feedbackAssignee);
+      personPopover.style.width = isFeedbackUserSuggest ? 'max-content' : '';
       const popoverRect = personPopover.getBoundingClientRect();
-      const isInputSuggest = activePersonTarget === 'feedbackAssignee' && trigger === feedbackAssignee;
-      const width = isInputSuggest ? rect.width : popoverRect.width || 360;
+      const width = isFeedbackUserSuggest
+        ? Math.max(rect.width, Math.ceil(personPopover.scrollWidth || popoverRect.width || 360))
+        : isInputSuggest
+          ? rect.width
+          : popoverRect.width || 360;
       const height = popoverRect.height || 430;
       const left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin));
       const aboveTop = rect.top - height - gap;
       const belowTop = rect.bottom + gap;
       const top = aboveTop >= margin ? aboveTop : Math.min(belowTop, window.innerHeight - height - margin);
-      personPopover.style.width = isInputSuggest ? `${rect.width}px` : '';
+      personPopover.style.width = isInputSuggest ? `${width}px` : '';
       personPopover.style.left = `${left}px`;
       personPopover.style.top = `${Math.max(margin, top)}px`;
     }
@@ -4015,12 +4259,14 @@
     }
 
     function openPersonPopover(trigger) {
-      activePersonTarget = trigger.dataset.personTrigger || 'feedbackAssignee';
+      activePersonTarget = trigger === feedbackUserInput ? 'feedbackUser' : trigger.dataset.personTrigger || 'feedbackAssignee';
       const isFollower = activePersonTarget === 'follower';
-      const isInputSuggest = activePersonTarget === 'feedbackAssignee' && trigger === feedbackAssignee;
+      const isFeedbackUserSuggest = activePersonTarget === 'feedbackUser' && trigger === feedbackUserInput;
+      const isInputSuggest = isFeedbackUserSuggest || (activePersonTarget === 'feedbackAssignee' && trigger === feedbackAssignee);
       personPopover?.classList.toggle('single', !isFollower);
       personPopover?.classList.toggle('input-suggest', isInputSuggest);
-      filterPersonOptions(isInputSuggest ? feedbackAssignee?.value || '' : personSearchInput?.value || '');
+      personPopover?.classList.toggle('filter-user-suggest', isFeedbackUserSuggest);
+      filterPersonOptions(isInputSuggest ? trigger.value || '' : personSearchInput?.value || '');
       updatePersonSelectionState();
       personPopover?.classList.add('is-open');
       personPopover?.setAttribute('aria-hidden', 'false');
@@ -4030,6 +4276,7 @@
     function closePersonPopover() {
       personPopover?.classList.remove('is-open');
       personPopover?.classList.remove('input-suggest');
+      personPopover?.classList.remove('filter-user-suggest');
       personPopover?.setAttribute('aria-hidden', 'true');
       filterPersonOptions('');
       activePersonTarget = null;
@@ -4037,7 +4284,7 @@
 
     function renderPerson(target, person) {
       if (target?.matches?.('input')) {
-        target.value = person.name;
+        target.value = person.value || person.name;
         return;
       }
       target.innerHTML = `<span class="person-avatar ${person.avatar}">${person.initial}</span><span>${person.name}</span>`;
@@ -4124,13 +4371,18 @@
       });
     });
 
+    document.querySelectorAll('.row-actions .delete').forEach((deleteLink) => {
+      deleteLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        openDeleteConfirmModal(deleteLink.closest('tr'));
+      });
+    });
+
     relationCards.forEach((card) => {
       card.addEventListener('click', () => setRelationMode(card.dataset.relation));
     });
 
     feedbackTypeSelect?.addEventListener('change', updateFeedbackTypeView);
-    demandTypeSelect?.addEventListener('change', updateVersionSelectValue);
-    updateVersionSelectValue();
     updateFeedbackTypeView();
 
     feedbackAssignee?.addEventListener('input', () => {
@@ -4144,6 +4396,18 @@
 
     feedbackAssignee?.addEventListener('focus', () => {
       if (feedbackAssignee.value.trim()) openPersonPopover(feedbackAssignee);
+    });
+
+    feedbackUserInput?.addEventListener('input', () => {
+      if (!feedbackUserInput.value.trim()) {
+        closePersonPopover();
+        return;
+      }
+      openPersonPopover(feedbackUserInput);
+    });
+
+    feedbackUserInput?.addEventListener('focus', () => {
+      if (feedbackUserInput.value.trim()) openPersonPopover(feedbackUserInput);
     });
 
     personSearchInput?.addEventListener('input', () => filterPersonOptions(personSearchInput.value));
@@ -4165,13 +4429,16 @@
           ? '#demand-owner'
           : activePersonTarget === 'feedbackAssignee'
             ? '#feedback-assignee'
-            : '#demand-follower';
+            : activePersonTarget === 'feedbackUser'
+              ? '[data-feedback-user-input]'
+              : '#demand-follower';
         const target = document.querySelector(targetSelector);
         if (!target) return;
-        const person = { avatar: option.dataset.avatar, initial: option.dataset.initial, name: option.dataset.name };
-        if (activePersonTarget === 'owner' || activePersonTarget === 'feedbackAssignee') {
+        const person = { avatar: option.dataset.avatar, initial: option.dataset.initial, name: option.dataset.name, value: option.dataset.value };
+        if (activePersonTarget === 'owner' || activePersonTarget === 'feedbackAssignee' || activePersonTarget === 'feedbackUser') {
           renderPerson(target, person);
           if (activePersonTarget === 'feedbackAssignee') syncDemandOwnerFromAssignee(person);
+          if (activePersonTarget === 'feedbackUser') syncFilterClearButton(target);
           closePersonPopover();
           return;
         }
@@ -4227,21 +4494,31 @@
     });
 
     document.addEventListener('click', (event) => {
+      if (!departmentSuggestPopover?.contains(event.target) && event.target !== departmentInput) {
+        closeDepartmentSuggestPopover();
+      }
       if (!priorityPicker?.contains(event.target)) {
         priorityPicker?.classList.remove('is-open');
         priorityTrigger?.setAttribute('aria-expanded', 'false');
       }
-      if (!personPopover?.contains(event.target) && !event.target.closest('[data-person-trigger]') && event.target !== feedbackAssignee) {
+      if (!personPopover?.contains(event.target) && !event.target.closest('[data-person-trigger]') && event.target !== feedbackAssignee && event.target !== feedbackUserInput) {
         closePersonPopover();
       }
     });
 
     window.addEventListener('resize', () => {
+      refreshDepartmentDisplayValue();
+      filterToggleButtons.forEach(syncFilterCollapseState);
+      if (departmentSuggestPopover?.classList.contains('is-open')) positionDepartmentSuggestPopover();
       if (priorityPicker?.classList.contains('is-open')) positionPriorityMenu();
-      if (personPopover?.classList.contains('is-open')) closePersonPopover();
+      if (personPopover?.classList.contains('is-open')) {
+        if (activePersonTarget === 'feedbackUser') positionPersonPopover(feedbackUserInput);
+        else closePersonPopover();
+      }
     });
 
     document.querySelector('.modal-body')?.addEventListener('scroll', () => {
+      if (departmentSuggestPopover?.classList.contains('is-open')) positionDepartmentSuggestPopover();
       if (priorityPicker?.classList.contains('is-open')) positionPriorityMenu();
       if (personPopover?.classList.contains('is-open')) closePersonPopover();
     });
@@ -4256,6 +4533,41 @@
 
     document.querySelectorAll('[data-rebind-modal-close], [data-rebind-modal-confirm]').forEach((button) => {
       button.addEventListener('click', closeRebindModal);
+    });
+
+    document.querySelectorAll('[data-delete-modal-close]').forEach((button) => {
+      button.addEventListener('click', closeDeleteConfirmModal);
+    });
+
+    document.querySelector('[data-delete-modal-confirm]')?.addEventListener('click', confirmDeleteFeedback);
+
+    document.querySelector('[data-new-feedback-open]')?.addEventListener('click', openNewFeedbackModal);
+
+    document.querySelectorAll('[data-new-feedback-close]').forEach((button) => {
+      button.addEventListener('click', closeNewFeedbackModal);
+    });
+
+    document.querySelectorAll('[data-rich-command]').forEach((button) => {
+      button.addEventListener('click', () => {
+        focusRichEditor();
+        document.execCommand(button.dataset.richCommand, false, null);
+      });
+    });
+
+    document.querySelector('[data-rich-image-trigger]')?.addEventListener('click', () => {
+      newFeedbackRichImageInput?.click();
+    });
+
+    newFeedbackRichImageInput?.addEventListener('change', () => {
+      insertRichEditorImage(newFeedbackRichImageInput.files?.[0]);
+      newFeedbackRichImageInput.value = '';
+    });
+
+    newFeedbackForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!newFeedbackForm.reportValidity()) return;
+      closeNewFeedbackModal();
+      showCopyToast('反馈已提交');
     });
 
     document.querySelectorAll('[data-detail-drawer-close]').forEach((button) => {
@@ -4278,6 +4590,19 @@
       openClaimModal(row);
     });
 
+    detailDescriptionEditButton?.addEventListener('click', openDescriptionEditor);
+
+    detailDrawer?.addEventListener('click', (event) => {
+      if (event.target.closest('[data-detail-description-cancel]')) {
+        event.preventDefault();
+        closeDescriptionEditor();
+      }
+      if (event.target.closest('[data-detail-description-save]')) {
+        event.preventDefault();
+        saveDescriptionEditor();
+      }
+    });
+
     claimModal?.addEventListener('click', (event) => {
       if (event.target === claimModal) closeClaimModal();
     });
@@ -4288,6 +4613,14 @@
 
     rebindModal?.addEventListener('click', (event) => {
       if (event.target === rebindModal) closeRebindModal();
+    });
+
+    deleteConfirmModal?.addEventListener('click', (event) => {
+      if (event.target === deleteConfirmModal) closeDeleteConfirmModal();
+    });
+
+    newFeedbackModal?.addEventListener('click', (event) => {
+      if (event.target === newFeedbackModal) closeNewFeedbackModal();
     });
 
     detailDrawer?.addEventListener('click', (event) => {
@@ -4307,6 +4640,12 @@
       }
       if (event.key === 'Escape' && rebindModal?.classList.contains('is-open')) {
         closeRebindModal();
+      }
+      if (event.key === 'Escape' && deleteConfirmModal?.classList.contains('is-open')) {
+        closeDeleteConfirmModal();
+      }
+      if (event.key === 'Escape' && newFeedbackModal?.classList.contains('is-open')) {
+        closeNewFeedbackModal();
       }
       if (event.key === 'Escape' && detailDrawer?.classList.contains('is-open')) {
         closeDetailDrawer();

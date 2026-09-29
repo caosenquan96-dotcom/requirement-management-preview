@@ -489,12 +489,14 @@
 
     .feedback-page { padding-top: 0; background: transparent; min-height: calc(100vh - 116px); }
     .feedback-filter {
+      --filter-label-width: 5em;
       padding: 28px 30px 26px;
       margin-bottom: 22px;
       background: #fff;
       border: 1px solid rgba(230, 234, 244, .96);
       border-radius: 18px;
       box-shadow: 0 12px 32px rgba(34, 43, 69, .06);
+      container-type: inline-size;
     }
     .filter-grid {
       display: grid;
@@ -505,11 +507,11 @@
     .filter-item {
       min-width: 0;
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr);
+      grid-template-columns: var(--filter-label-width) minmax(0, 1fr);
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
-    .filter-label { color: #555b66; font-size: 14px; font-weight: 500; white-space: nowrap; }
+    .filter-label { color: #555b66; font-size: 14px; font-weight: 500; text-align: right; white-space: nowrap; }
     .filter-input,
     .filter-select {
       width: 100%;
@@ -524,6 +526,31 @@
       box-shadow: inset 0 1px 2px rgba(40, 48, 78, .02);
     }
     .filter-input::placeholder { color: #b6bbc6; }
+    .filter-input::-webkit-search-cancel-button { display: none; }
+    .filter-clear-field {
+      position: relative;
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+    .filter-clear-field .filter-input { padding-right: 38px; }
+    .filter-clear-btn {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      z-index: 1;
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      border: 0;
+      color: #b8bec8;
+      background: transparent;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    .filter-clear-btn[hidden] { display: none; }
+    .filter-clear-btn:hover { color: #8d95a2; }
+    .filter-clear-btn svg { display: block; width: 16px; height: 16px; }
     .filter-select {
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' stroke='%23b9bec8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -531,6 +558,9 @@
       background-size: 12px 12px;
       background-repeat: no-repeat;
     }
+    .filter-select.is-placeholder,
+    .filter-select:has(option[value=""]:checked) { color: #b6bbc6; }
+    .filter-select option { color: #424854; }
     .date-range {
       width: 100%;
       height: 38px;
@@ -546,6 +576,7 @@
       box-shadow: inset 0 1px 2px rgba(40, 48, 78, .02);
     }
     .date-range svg { width: 18px; height: 18px; color: #b6bbc6; }
+    .date-clear-field { height: 100%; }
     .date-range-input {
       width: 100%;
       min-width: 0;
@@ -557,6 +588,9 @@
       background: transparent;
       font: inherit;
     }
+    .date-clear-field .date-range-input { padding-right: 18px; }
+    .date-clear-field .filter-clear-btn { right: 0; width: 14px; height: 14px; }
+    .date-clear-field .filter-clear-btn svg { width: 14px; height: 14px; }
     .date-range-input::placeholder { color: #b6bbc6; }
     .date-separator { color: #2f3440; font-size: 16px; font-weight: 700; }
     .extra-filter-item[hidden] { display: none; }
@@ -618,6 +652,15 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+    }
+    @container (max-width: 1407px) {
+      .filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @container (max-width: 1049px) {
+      .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @container (max-width: 691px) {
+      .filter-grid { grid-template-columns: 1fr; }
     }
     .feedback-table-wrap {
       padding: 22px 24px 18px;
@@ -732,6 +775,7 @@
       flex: 0 0 auto;
     }
     .feedback-image-thumb.image-2 { background-image: url("assets/feedback-preview-2.png"); }
+    .feedback-image-thumb.image-3 { background-image: url("assets/feedback-preview-3.png"); }
     .feedback-image-thumb:hover { border-color: #737bff; box-shadow: 0 0 0 3px rgba(115, 123, 255, .12); }
     .feedback-image-empty { color: #b6becd; }
 
@@ -2204,26 +2248,19 @@
                 </label>
                 <label class="filter-item">
                   <span class="filter-label">反馈人部门</span>
-                  <select class="filter-select">
-                    <option>全部反馈人部门</option>
-                    <option>AI效能</option>
-                    <option>JoyAI产品部</option>
-                    <option>基础产品部</option>
-                    <option>支付基础产品部</option>
-                    <option>技术保障部</option>
-                  </select>
+                  <input class="filter-input" type="search" placeholder="请输入反馈人部门" />
                 </label>
                 <label class="filter-item">
                   <span class="filter-label">所属平台</span>
                   <select class="filter-select">
-                    <option>全部所属平台</option>
+                    <option value="">请选择所属平台</option>
                     <option>JoyWorker</option>
                   </select>
                 </label>
                 <label class="filter-item">
                   <span class="filter-label">意见类型</span>
                   <select class="filter-select">
-                    <option>全部意见类型</option>
+                    <option value="">请选择意见类型</option>
                     <option>体验提升</option>
                     <option>功能建议</option>
                     <option>新增功能</option>
@@ -2233,7 +2270,7 @@
                 <label class="filter-item">
                   <span class="filter-label">状态</span>
                   <select class="filter-select">
-                    <option>全部状态</option>
+                    <option value="">请选择状态</option>
                     <option>待处理</option>
                     <option>处理中</option>
                     <option>已处理</option>
@@ -2260,7 +2297,7 @@
                     <input class="date-range-input" type="text" placeholder="结束时间" aria-label="反馈结束时间" />
                   </span>
                 </label>
-                <label class="filter-item extra-filter-item" data-extra-filter hidden>
+                <label class="filter-item extra-filter-item" data-extra-filter>
                   <span class="filter-label">更新时间</span>
                   <span class="date-range">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2272,18 +2309,18 @@
                     <input class="date-range-input" type="text" placeholder="结束时间" aria-label="更新结束时间" />
                   </span>
                 </label>
-                <label class="filter-item extra-filter-item" data-extra-filter hidden>
+                <label class="filter-item extra-filter-item" data-extra-filter>
                   <span class="filter-label">反馈单号</span>
                   <input class="filter-input" type="search" placeholder="请输入反馈单号" />
                 </label>
               </div>
               <div class="filter-actions">
-                <button class="filter-btn filter-toggle-btn" type="button" data-filter-toggle aria-expanded="false">
+                <button class="filter-btn filter-toggle-btn is-expanded" type="button" data-filter-toggle aria-expanded="true">
                   <svg class="filter-toggle-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path d="M2.2 3.7 7 8.5l4.8-4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M2.2 8.1 7 12.9l4.8-4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  <span data-filter-toggle-text>更多筛选</span>
+                  <span data-filter-toggle-text>收起筛选</span>
                 </button>
                 <button class="filter-btn" type="button" data-clear-relation-filter>重置</button>
                 <button class="filter-btn primary" type="button">查询</button>
@@ -2298,7 +2335,7 @@
                     <col style="width: 120px;" />
                     <col style="width: 110px;" />
                     <col style="width: 380px;" />
-                    <col style="width: 120px;" />
+                    <col style="width: 144px;" />
                     <col style="width: 130px;" />
                     <col style="width: 170px;" />
                     <col style="width: 110px;" />
@@ -2313,7 +2350,7 @@
                       <th style="width: 120px;">所属平台</th>
                       <th style="width: 110px;">意见类型</th>
                       <th class="title-col">标题</th>
-                      <th class="image-col" style="width: 120px;">图片详情</th>
+                      <th class="image-col" style="width: 144px;">图片详情</th>
                       <th style="width: 130px;">反馈用户</th>
                       <th style="width: 170px;">反馈时间</th>
                       <th style="width: 110px;">状态</th>
@@ -2329,7 +2366,7 @@
                       <td>JoyWorker</td>
                       <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">数字员工交付详情列表排序不明确且不稳定</a></td>
-                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button></span></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button><button class="feedback-image-thumb image-3" type="button" title="预览图片 3" aria-label="预览图片 3" data-preview-image="assets/feedback-preview-3.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-guo">郭</span>郭帅</span></td>
                       <td>2026-09-24 10:41</td>
                       <td><span class="feedback-status pending">待处理</span></td>
@@ -2357,7 +2394,7 @@
                       <td>JoyWorker</td>
                       <td>新增功能</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">仓颉提bug，提交人仓颉，受理人沈括，关注人是否可以加一下此需求的受理人</a></td>
-                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button></span></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button><button class="feedback-image-thumb image-3" type="button" title="预览图片 3" aria-label="预览图片 3" data-preview-image="assets/feedback-preview-3.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-cao">曹</span>曹森泉</span></td>
                       <td>2026-09-23 16:40</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2385,7 +2422,7 @@
                       <td>JoyWorker</td>
                       <td>体验提升</td>
                       <td class="title-cell"><a class="feedback-title-link" href="#view">代码提交的节点优化</a></td>
-                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button></span></td>
+                      <td class="image-cell"><span class="feedback-image-list"><button class="feedback-image-thumb" type="button" title="预览图片 1" aria-label="预览图片 1" data-preview-image="assets/feedback-preview.png"></button><button class="feedback-image-thumb image-2" type="button" title="预览图片 2" aria-label="预览图片 2" data-preview-image="assets/feedback-preview-2.png"></button><button class="feedback-image-thumb image-3" type="button" title="预览图片 3" aria-label="预览图片 3" data-preview-image="assets/feedback-preview-3.png"></button></span></td>
                       <td><span class="feedback-user"><span class="user-avatar avatar-qin">秦</span>秦继芳</span></td>
                       <td>2026-09-23 18:18</td>
                       <td><span class="feedback-status processing">处理中</span></td>
@@ -2717,9 +2754,9 @@
           <input class="modal-input" id="feedback-assignee" type="search" placeholder="请输入ERP/姓名搜索" />
         </div>
         <label class="modal-field" data-feedback-type-field>
-          <span class="modal-label">反馈类型<span class="required" data-feedback-type-required>*</span></span>
+          <span class="modal-label">意见类型<span class="required" data-feedback-type-required>*</span></span>
           <select class="modal-select" id="feedback-type" required>
-            <option value="" selected disabled hidden>请选择反馈类型</option>
+            <option value="" selected disabled hidden>请选择意见类型</option>
             <option>非需求</option>
             <option>产品需求</option>
             <option>研发需求</option>
@@ -3000,9 +3037,9 @@
               </select>
             </label>
             <label class="modal-field">
-              <span class="modal-label">反馈类型<span class="required">*</span></span>
+              <span class="modal-label">意见类型<span class="required">*</span></span>
               <select class="modal-select" id="new-feedback-type" required>
-                <option value="" selected disabled hidden>请选择反馈类型</option>
+                <option value="" selected disabled hidden>请选择意见类型</option>
                 <option>Bug修复</option>
                 <option>体验提升</option>
                 <option>新增功能</option>
@@ -3129,6 +3166,7 @@
     const relationInput = document.querySelector('[data-relation-input]');
     const relationClearButton = document.querySelector('[data-clear-relation-filter]');
     const filterToggleButtons = document.querySelectorAll('[data-filter-toggle]');
+    const filterClearInputs = document.querySelectorAll('#feedback-panel .feedback-filter .filter-input, #feedback-panel .feedback-filter .date-range-input');
     const paginationTotal = document.querySelector('[data-pagination-total]');
     const paginationPages = document.querySelector('[data-pagination-pages]');
     const paginationPrev = document.querySelector('[data-pagination-prev]');
@@ -3192,6 +3230,48 @@
     let imagePreviewScale = 1;
     let imagePreviewRotation = 0;
     let selectedFollowers = [{ avatar: 'avatar-ma', initial: '马', name: '马莹莹' }];
+
+    function syncFilterClearButton(input) {
+      if (!input) return;
+      const clearButton = input.closest('.filter-clear-field')?.querySelector('[data-filter-clear]');
+      if (clearButton) clearButton.hidden = !input.value.trim();
+    }
+
+    function syncAllFilterClearButtons() {
+      filterClearInputs.forEach(syncFilterClearButton);
+    }
+
+    function setupFilterClearInput(input) {
+      if (!input || input.dataset.clearReady === 'true') return;
+      input.dataset.clearReady = 'true';
+      const wrapper = document.createElement('span');
+      wrapper.className = input.classList.contains('date-range-input') ? 'filter-clear-field date-clear-field' : 'filter-clear-field';
+      input.parentNode.insertBefore(wrapper, input);
+      wrapper.appendChild(input);
+
+      const clearButton = document.createElement('button');
+      clearButton.className = 'filter-clear-btn';
+      clearButton.type = 'button';
+      clearButton.hidden = true;
+      clearButton.dataset.filterClear = '';
+      clearButton.setAttribute('aria-label', '清空输入');
+      clearButton.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 5.5l5 5m0-5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      wrapper.appendChild(clearButton);
+
+      input.addEventListener('input', () => syncFilterClearButton(input));
+      input.addEventListener('change', () => syncFilterClearButton(input));
+      clearButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        input.value = '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        syncFilterClearButton(input);
+        input.focus();
+      });
+      syncFilterClearButton(input);
+    }
+
+    filterClearInputs.forEach(setupFilterClearInput);
 
     function buildDetailImages(imageName = '问题截图.png') {
       return `
@@ -3339,6 +3419,7 @@
         relationInput.value = demandId;
         relationInput.classList.add('is-filtered');
       }
+      syncFilterClearButton(relationInput);
       updateFeedbackPagination();
       activatePanel('feedback');
       document.querySelector('#feedback-panel')?.scrollIntoView({ block: 'start' });
@@ -3351,6 +3432,7 @@
         relationInput.value = '';
         relationInput.classList.remove('is-filtered');
       }
+      syncFilterClearButton(relationInput);
       updateFeedbackPagination();
     }
 
@@ -3372,6 +3454,7 @@
       document.querySelectorAll('#feedback-panel .date-range-input').forEach((input) => {
         input.value = '';
       });
+      syncAllFilterClearButtons();
       activatePanel('feedback');
       updateFeedbackPagination();
     }
@@ -3421,7 +3504,7 @@
         const filterToggleText = button.querySelector('[data-filter-toggle-text]');
         button.setAttribute('aria-expanded', String(nextExpanded));
         button.classList.toggle('is-expanded', nextExpanded);
-        if (filterToggleText) filterToggleText.textContent = nextExpanded ? '收起筛选' : '更多筛选';
+        if (filterToggleText) filterToggleText.textContent = nextExpanded ? '收起筛选' : '展开筛选';
         filterPanel?.querySelectorAll('[data-extra-filter]').forEach((item) => {
           item.hidden = !nextExpanded;
         });
