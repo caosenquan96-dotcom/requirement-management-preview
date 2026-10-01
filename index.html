@@ -966,7 +966,8 @@
     .feedback-table th.is-resizing .col-resizer::after { background: #737bff; }
     body.col-resizing { cursor: col-resize; user-select: none; }
     .demand-page { padding-top: 0; background: transparent; min-height: calc(100vh - 116px); }
-    .demand-table { min-width: 2270px; }
+    .demand-table { min-width: 2530px; }
+    .demand-table td { height: 78px; }
     .demand-table th { color: #5f6878; background: #f7f8fb; }
     .demand-table .name-col,
     .demand-table .name-cell { position: sticky; left: 0; z-index: 2; }
@@ -992,6 +993,53 @@
       gap: 8px;
       max-width: 100%;
     }
+    .demand-table .attachment-cell {
+      height: 78px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      overflow: visible;
+      white-space: normal;
+    }
+    .attachment-docs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 100%;
+    }
+    .attachment-doc {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 100%;
+      white-space: nowrap;
+    }
+    .attachment-tag {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 6px;
+      color: #595f6c;
+      background: #f1f2f4;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: default;
+    }
+    .attachment-link {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: #252b3a;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .attachment-link:hover { color: #2f8dfb; }
     .iteration-version {
       display: inline-flex;
       align-items: center;
@@ -2177,6 +2225,7 @@
                     <col style="width: 218px;" />
                     <col style="width: 128px;" />
                     <col style="width: 220px;" />
+                    <col style="width: 260px;" />
                     <col style="width: 172px;" />
                     <col style="width: 172px;" />
                     <col style="width: 190px;" />
@@ -2192,6 +2241,7 @@
                       <th style="width: 218px;">迭代版本号</th>
                       <th style="width: 128px;"><span class="sort-head">优先级<span class="sort-icon" aria-hidden="true"></span></span></th>
                       <th style="width: 220px;"><span class="sort-head">行云状态<span class="sort-icon" aria-hidden="true"></span></span></th>
+                      <th style="width: 260px;">附件文档</th>
                       <th style="width: 172px;">任务处理人</th>
                       <th style="width: 172px;"><span class="sort-head">创建时间<span class="sort-icon" aria-hidden="true"></span></span></th>
                       <th style="width: 190px;"><span class="sort-head">计划上线日期<span class="sort-icon" aria-hidden="true"></span></span></th>
@@ -2208,6 +2258,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p0" aria-hidden="true"></span>P0</span></td>
                       <td><span class="demand-status prd">方案/PRD设计</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">PRD</span><a class="attachment-link" href="#document">JoyWorker需求管理能力建设</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-wang">沈</span><span class="user-avatar avatar-feng">马</span><span class="user-avatar avatar-liu">仓</span><span class="user-avatar avatar-shen">郎</span><span class="user-avatar avatar-basic">智</span></span></td>
                       <td>2026-08-15 14:30</td>
                       <td></td>
@@ -2222,6 +2273,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p1" aria-hidden="true"></span>P1</span></td>
                       <td><span class="demand-status done">上线完成</span><span class="status-extra">待业务验收</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">PRD</span><a class="attachment-link" href="#document">JoyWorker需求管理能力建设</a></span><span class="attachment-doc"><span class="attachment-tag">TRD</span><a class="attachment-link" href="#document">需求管理开发设计文档</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="user-avatar avatar-cao">沈</span></span></td>
                       <td>2026-09-09 13:06</td>
                       <td>2026-09-16</td>
@@ -2236,6 +2288,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.6</span><span class="version-select-date">（2026-10-15上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p2" aria-hidden="true"></span>P2</span></td>
                       <td><span class="demand-status done">完成</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">PRD</span><a class="attachment-link" href="#document">JoyWorker需求管理能力建设</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="user-avatar avatar-guo">郭</span><span class="user-avatar avatar-test">图</span></span></td>
                       <td>2026-09-09 15:23</td>
                       <td>2026-09-15</td>
@@ -2250,6 +2303,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.7</span><span class="version-select-date">（2026-10-22上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p3" aria-hidden="true"></span>P3</span></td>
                       <td><span class="demand-status prd">方案/PRD设计</span></td>
+                      <td class="attachment-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="assignee-name">基础保障003号</span></span></td>
                       <td>2026-09-16 20:20</td>
                       <td></td>
@@ -2264,6 +2318,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.8</span><span class="version-select-date">（2026-10-29上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p4" aria-hidden="true"></span>P4</span></td>
                       <td><span class="demand-status prd">方案/PRD设计</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">PRD</span><a class="attachment-link" href="#document">JoyWorker需求管理能力建设</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-basic">基</span><span class="assignee-name">基础保障003号</span></span></td>
                       <td>2026-09-18 09:18</td>
                       <td></td>
@@ -2278,6 +2333,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.5</span><span class="version-select-date">（2026-10-08上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p2" aria-hidden="true"></span>P2</span></td>
                       <td><span class="demand-status done">完成</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">PRD</span><a class="attachment-link" href="#document">JoyWorker需求管理能力建设</a></span><span class="attachment-doc"><span class="attachment-tag">TRD</span><a class="attachment-link" href="#document">需求管理开发设计文档</a></span><span class="attachment-doc"><span class="attachment-tag">设计稿</span><a class="attachment-link" href="#document">JoyWorker需求管理页面</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-cao">曹</span><span class="assignee-name">曹森泉</span></span></td>
                       <td>2026-09-24 11:12</td>
                       <td>2026-10-08</td>
@@ -2292,6 +2348,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.6</span><span class="version-select-date">（2026-10-15上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p1" aria-hidden="true"></span>P1</span></td>
                       <td><span class="demand-status prd">方案/PRD设计</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">TRD</span><a class="attachment-link" href="#document">需求管理开发设计文档</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-shen">沈</span><span class="assignee-name">沈括</span></span></td>
                       <td>2026-09-24 15:28</td>
                       <td>2026-10-15</td>
@@ -2306,6 +2363,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.7</span><span class="version-select-date">（2026-10-22上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p3" aria-hidden="true"></span>P3</span></td>
                       <td><span class="demand-status dev">开发中</span></td>
+                      <td class="attachment-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-zhu">朱</span><span class="assignee-name">朱欣鑫</span></span></td>
                       <td>2026-09-25 10:06</td>
                       <td>2026-10-22</td>
@@ -2320,6 +2378,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.8</span><span class="version-select-date">（2026-10-29上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p2" aria-hidden="true"></span>P2</span></td>
                       <td><span class="demand-status dev">开发中</span></td>
+                      <td class="attachment-cell"><span class="attachment-docs"><span class="attachment-doc"><span class="attachment-tag">PRD</span><a class="attachment-link" href="#document">JoyWorker需求管理能力建设</a></span></span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-li">李</span><span class="assignee-name">李铁</span></span></td>
                       <td>2026-09-25 16:42</td>
                       <td>2026-10-29</td>
@@ -2334,6 +2393,7 @@
                       <td><span class="iteration-version"><span class="version-select-name">V 1.4.6</span><span class="version-select-date">（2026-10-15上线）</span></span></td>
                       <td><span class="priority-value"><span class="priority-icon priority-p4" aria-hidden="true"></span>P4</span></td>
                       <td><span class="demand-status done">完成</span></td>
+                      <td class="attachment-cell"><span class="feedback-image-empty">-</span></td>
                       <td><span class="avatar-stack"><span class="user-avatar avatar-yu">于</span><span class="assignee-name">于坤</span></span></td>
                       <td>2026-09-26 09:35</td>
                       <td>2026-10-15</td>
@@ -3674,7 +3734,7 @@
     feedbackTableScrolls.forEach(enableHorizontalDrag);
 
     function getTitleOverflowTarget(cell) {
-      return cell.querySelector('.feedback-title-link') || cell;
+      return cell.querySelector('.feedback-title-link, .attachment-link') || cell;
     }
 
     function isTitleOverflow(cell) {
@@ -3705,7 +3765,7 @@
       feedbackTitleTooltip.style.setProperty('--tooltip-arrow-left', `${arrowLeft}px`);
     }
 
-    document.querySelectorAll('#feedback-panel .feedback-table .title-cell').forEach((cell) => {
+    document.querySelectorAll('#feedback-panel .feedback-table .title-cell, #demand-panel .demand-table .name-cell, #demand-panel .demand-table .attachment-link').forEach((cell) => {
       cell.addEventListener('mouseenter', () => showFeedbackTitleTooltip(cell));
       cell.addEventListener('mouseleave', hideFeedbackTitleTooltip);
     });
